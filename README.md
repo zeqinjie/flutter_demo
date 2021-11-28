@@ -21,4 +21,4 @@ samples, guidance on mobile development, and a full API reference.
 走势图效果 fork 至 [传送门](https://github.com/good-good-study/flutter_chart) 感谢~
 - 适配了空安全
 - 补充了走势图点，及个别细节调整，以满足需求
-<img src="https://github.com/zeqinjie/flutter_demo/blob/master/pic/charts.png" width="443" height="897" align="middle"/>
+<img src="https://github.com/zeqinjie/flutter_demo/blob/main/pic/charts.png" width="443" height="897" align="middle"/>
