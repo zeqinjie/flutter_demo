@@ -4,7 +4,7 @@ import 'package:tw_chart_demo/chart/chart_bean.dart';
 import 'package:tw_chart_demo/chart/painter/base_painter.dart';
 
 class ChartLinePainter extends BasePainter {
-  double value; //当前动画值
+  double value; // 当前动画值
   List<ChartBean> chartBeans;
   List<Color>? shaderColors; //渐变色
   Color lineColor; //曲线或折线的颜色
@@ -105,7 +105,7 @@ class ChartLinePainter extends BasePainter {
   ///计算Path
   void initPath(Size size) {
     if (path == null) {
-      if (chartBeans != null && chartBeans.length > 0 && maxMin[0] > 0) {
+      if (chartBeans.isNotEmpty && maxMin[0] > 0) {
         path = Path();
         double preX, preY, currentX, currentY;
         int length = chartBeans.length > 7 ? 7 : chartBeans.length; // 最多7组数据
@@ -116,7 +116,7 @@ class ChartLinePainter extends BasePainter {
             var value = (startY - chartBeans[i].y / maxMin[0] * _fixedHeight);
             path!.moveTo(key, value);
             _points[key] = Offset(key, value);
-            print("currentX:$key,currentY:$value");
+            // print("currentX:$key,currentY:$value");
             continue;
           }
           currentX = startX + W * i;
@@ -130,7 +130,7 @@ class ChartLinePainter extends BasePainter {
             path!.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
                 currentY, currentX, currentY);
           } else {
-            print("currentX:$currentX,currentY:$currentY");
+            // print("currentX:$currentX,currentY:$currentY");
             path!.lineTo(currentX, currentY);
           }
         }
@@ -168,7 +168,7 @@ class ChartLinePainter extends BasePainter {
 
   ///x,y轴刻度 & 辅助线
   void drawRuler(Canvas canvas, Paint paint) {
-    if (chartBeans != null && chartBeans.isNotEmpty) {
+    if (chartBeans.isNotEmpty) {
       int length = chartBeans.length > 7 ? 7 : chartBeans.length; //最多绘制7个
       double dw = _fixedWidth / (length - 1); //两个点之间的x方向距离
       double dh = _fixedHeight / (length - 1); //两个点之间的y方向距离
@@ -235,7 +235,7 @@ class ChartLinePainter extends BasePainter {
 
   ///曲线或折线
   void _drawLine(Canvas canvas, Size size) {
-    if (chartBeans == null || chartBeans.isEmpty) return;
+    if (chartBeans.isEmpty) return;
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = lineWidth
@@ -308,13 +308,13 @@ class ChartLinePainter extends BasePainter {
     print('globalPosition == $globalPosition');
     if (!_isAnimationEnd) return;
     if (globalPosition == null) return;
-    if (chartBeans == null || chartBeans.isEmpty || maxMin[0] <= 0) return;
+    if (chartBeans.isEmpty || maxMin[0] <= 0) return;
     try {
       Offset? pointer = globalPosition;
       if(pointer != null) {
         ///修复x轴越界
-        if (pointer!.dx < startX) pointer = Offset(startX, pointer.dy);
-        if (pointer!.dx > endX) pointer = Offset(endX, pointer.dy);
+        if (pointer.dx < startX) pointer = Offset(startX, pointer.dy);
+        if (pointer.dx > endX) pointer = Offset(endX, pointer.dy);
 
         double currentX = 0, currentY = 0;
         int length = chartBeans.length > 7 ? 7 : chartBeans.length;
@@ -322,7 +322,7 @@ class ChartLinePainter extends BasePainter {
         for (int i = 0; i < length; i++) {
           currentX = startX + W * i;
           currentY = chartBeans[i].y;
-          if (currentX - W / 2 <= pointer!.dx && pointer!.dx <= currentX + W / 2) {
+          if (pointer != null && currentX - W / 2 <= pointer.dx && pointer.dx <= currentX + W / 2) {
             pointer = _points[currentX];
             break;
           }
@@ -337,8 +337,8 @@ class ChartLinePainter extends BasePainter {
         if (isShowPressedHintLine) {
           canvas
             ..drawLine(
-                Offset(startX, pointer!.dy),
-                Offset(endX + basePadding, pointer!.dy),
+                Offset(startX, pointer.dy),
+                Offset(endX + basePadding, pointer.dy),
                 hintLinePaint..strokeWidth = pressedHintLineWidth)
             ..drawLine(
                 Offset(pointer.dx, startY),
@@ -367,7 +367,7 @@ class ChartLinePainter extends BasePainter {
       }
 
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     }
   }
 }

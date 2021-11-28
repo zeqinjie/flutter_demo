@@ -1,18 +1,17 @@
-// @dart=2.9
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:tw_chart_demo/chart/chart_bean.dart';
 import 'package:tw_chart_demo/chart/painter/base_painter.dart';
 
 class ChartBarPainter extends BasePainter {
-  double _fixedHeight, _fixedWidth; //宽高
+  double _fixedHeight = 0, _fixedWidth = 0; //宽高
   double value; //当前动画值
   List<ChartBean> chartBeans;
-  double startX, endX, startY, endY;
+  double startX = 0, endX = 0, startY = 0, endY = 0;
   List<double> maxMin = [0, 0]; //存储极值
   Color rectColor; //柱状图默认的颜色
   bool isShowX; //是否显示x轴的文本
-  double rectWidth; //柱状图的宽度
+  double rectWidth = 0; //柱状图的宽度
   double fontSize; //刻度文本大小
   Color fontColor; //文本颜色
   double rectRadius; //矩形的圆角
@@ -26,7 +25,7 @@ class ChartBarPainter extends BasePainter {
   Color rectShadowColor; //触摸时显示的阴影颜色
   bool isShowTouchShadow; //触摸时是否显示阴影
   bool isShowTouchValue; //触摸时是否显示值
-  Offset globalPosition; //触摸位置
+  Offset? globalPosition; //触摸位置
   Map<Rect, double> rectMap = new Map();
 
   static const double defaultRectPadding = 8; //默认柱状图的间隔
@@ -40,11 +39,11 @@ class ChartBarPainter extends BasePainter {
     this.value = 1,
     this.isShowX = false,
     this.fontSize = 12,
-    this.fontColor,
+    this.fontColor = defaultColor,
     this.isCanTouch = false,
     this.isShowTouchShadow = true,
     this.isShowTouchValue = false,
-    this.rectShadowColor,
+    this.rectShadowColor = defaultColor,
     this.globalPosition,
     this.rectRadius = 0,
     this.rectRadiusTopLeft = 0,
@@ -84,7 +83,7 @@ class ChartBarPainter extends BasePainter {
 
   ///x轴刻度
   void _drawX(Canvas canvas, Size size) {
-    if (chartBeans != null && chartBeans.length > 0) {
+    if (chartBeans != null && chartBeans.isNotEmpty) {
       for (int i = 0; i < chartBeans.length; i++) {
         double x = startX + defaultRectPadding * i + rectWidth * i;
         TextPainter(
@@ -152,60 +151,62 @@ class ChartBarPainter extends BasePainter {
     if (globalPosition == null) return;
     if (chartBeans == null || chartBeans.length == 0 || maxMin[0] <= 0) return;
     try {
-      Offset pointer = globalPosition;
+      Offset? pointer = globalPosition;
 
-      ///修复x轴越界
-      if (pointer.dx < startX) pointer = Offset(startX, pointer.dy);
-      if (pointer.dx > endX) pointer = Offset(endX, pointer.dy);
+      if(pointer != null) {
+        ///修复x轴越界
+        if (pointer.dx < startX) pointer = Offset(startX, pointer.dy);
+        if (pointer.dx > endX) pointer = Offset(endX, pointer.dy);
 
-      //查找当前触摸点对应的rect
-      Rect currentRect;
-      var yValue;
-      rectMap.forEach((rect, value) {
-        if (rect.left - defaultRectPadding <= pointer.dx &&
-            pointer.dx <= rect.right + defaultRectPadding) {
-          currentRect = rect;
-          yValue = value;
-        }
-      });
-      if (currentRect != null) {
-        if (isShowTouchShadow) {
-          var paint = new Paint()
-            ..isAntiAlias = true
-            ..color = rectShadowColor == null
-                ? defaultRectShadowColor.withOpacity(0.5)
-                : rectShadowColor;
-          if (rectRadius != 0) {
-            canvas.drawRRect(
-                RRect.fromRectAndRadius(
-                    currentRect, Radius.circular(rectRadius)),
-                paint);
-          } else {
-            canvas.drawRRect(
-                RRect.fromRectAndCorners(currentRect,
-                    topLeft: Radius.circular(rectRadiusTopLeft),
-                    topRight: Radius.circular(rectRadiusTopRight),
-                    bottomLeft: Radius.circular(rectRadiusBottomLeft),
-                    bottomRight: Radius.circular(rectRadiusBottomRight)),
-                paint);
+        //查找当前触摸点对应的rect
+        Rect? currentRect;
+        String? yValue;
+        rectMap.forEach((rect, value) {
+          if (pointer != null && rect.left - defaultRectPadding <= pointer.dx &&
+              pointer.dx <= rect.right + defaultRectPadding) {
+            currentRect = rect;
+            yValue = value.toString();
+          }
+        });
+        if (currentRect != null) {
+          if (isShowTouchShadow) {
+            var paint =  Paint()
+              ..isAntiAlias = true
+              ..color = rectShadowColor; //?? defaultRectShadowColor.withOpacity(0.5);
+            if (rectRadius != 0) {
+              canvas.drawRRect(
+                  RRect.fromRectAndRadius(
+                      currentRect!, Radius.circular(rectRadius)),
+                  paint);
+            } else {
+              canvas.drawRRect(
+                  RRect.fromRectAndCorners(currentRect!,
+                      topLeft: Radius.circular(rectRadiusTopLeft),
+                      topRight: Radius.circular(rectRadiusTopRight),
+                      bottomLeft: Radius.circular(rectRadiusBottomLeft),
+                      bottomRight: Radius.circular(rectRadiusBottomRight)),
+                  paint);
+            }
+          }
+
+          ///绘制文本
+          if (isShowTouchValue) {
+            TextPainter(
+                textAlign: TextAlign.center,
+                ellipsis: '.',
+                maxLines: 1,
+                text: TextSpan(
+                    text: yValue,
+                    style: TextStyle(color: fontColor, fontSize: fontSize)),
+                textDirection: TextDirection.ltr)
+              ..layout(minWidth: 40, maxWidth: 40)
+              ..paint(canvas,
+                  Offset(currentRect!.left, currentRect!.top - basePadding));
           }
         }
-
-        ///绘制文本
-        if (isShowTouchValue) {
-          TextPainter(
-              textAlign: TextAlign.center,
-              ellipsis: '.',
-              maxLines: 1,
-              text: TextSpan(
-                  text: "$yValue",
-                  style: TextStyle(color: fontColor, fontSize: fontSize)),
-              textDirection: TextDirection.ltr)
-            ..layout(minWidth: 40, maxWidth: 40)
-            ..paint(canvas,
-                Offset(currentRect.left, currentRect.top - basePadding));
-        }
       }
+
+
     } catch (e) {
       print(e.toString());
     }
