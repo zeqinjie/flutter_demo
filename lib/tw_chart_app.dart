@@ -35,11 +35,11 @@ class TWChartDemo extends StatelessWidget {
     return ListView(
       physics: const BouncingScrollPhysics(),
       children: <Widget>[
-        _buildChartCurve(context),
+        // _buildChartCurve(context),
         // _buildChartLine(context),
         // _buildChartBarCircle(context),
         // _buildChartBarRound(context),
-        // _buildChartPie(context)
+        _buildChartPie(context)
       ],
     );
   }
@@ -53,7 +53,7 @@ class TWChartDemo extends StatelessWidget {
         ChartBean(x: '3月', y: 120),
         ChartBean(x: '4月', y: 67),
         ChartBean(x: '5月', y: 10),
-        ChartBean(x: '6月', y: 40),
+        ChartBean(x: '6月', y: 100),
       ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
@@ -62,7 +62,7 @@ class TWChartDemo extends StatelessWidget {
       lineColor: Colors.blueAccent,
       fontColor: Colors.grey,
       xyColor: Colors.white,
-      backgroundColor: Colors.yellow,
+      backgroundColor: Colors.white,
       isShowYValue: false,
       isShowXy: false,
       isShowXyRuler: false,
@@ -162,11 +162,11 @@ class TWChartDemo extends StatelessWidget {
       isShowTouchValue: true,
       rectRadiusTopLeft: 50,
       rectRadiusTopRight: 50,
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
       color: Colors.blue.withOpacity(0.4),
       child: chartBar,

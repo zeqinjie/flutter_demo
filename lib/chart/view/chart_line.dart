@@ -61,9 +61,7 @@ class ChartLine extends StatefulWidget {
     this.pressedPointRadius = 4,
     this.pressedHintLineWidth = 0.5,
     this.pressedHintLineColor = Colors.white,
-  })  : assert(lineColor != null),
-        assert(size != null),
-        super(key: key);
+  })  : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ChartLineState();

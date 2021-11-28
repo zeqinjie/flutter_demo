@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -8,9 +7,9 @@ import '../chart_pie_bean.dart';
 class ChartPiePainter extends BasePainter {
   double value; //当前动画值
   List<ChartPieBean> chartBeans;
-  double startX, endX, startY, endY;
+  double startX = 0, endX = 0, startY = 0, endY = 0;
   double R, centerR; //圆弧半径,中心圆半径
-  double centerX, centerY; //圆心
+  double centerX = 0, centerY = 0; //圆心
   double fontSize; //刻度文本大小
   Color fontColor; //文本颜色
   Color centerColor; //中心圆颜色
@@ -20,11 +19,11 @@ class ChartPiePainter extends BasePainter {
   ChartPiePainter(
     this.chartBeans, {
     this.value = 1,
-    this.R,
+    this.R = 0,
     this.centerR = 0,
     this.centerColor = defaultColor,
     this.fontSize = 12,
-    this.fontColor,
+    this.fontColor = defaultColor,
   });
 
   @override
@@ -52,7 +51,7 @@ class ChartPiePainter extends BasePainter {
     double yR = startY - centerY;
     double realR = xR.compareTo(yR) > 0 ? yR : xR;
 
-    if (R == null || R == 0) {
+    if (R == 0) {
       R = realR;
     } else {
       if (R > realR) R = realR;
@@ -68,7 +67,7 @@ class ChartPiePainter extends BasePainter {
     var realAngle = value * 2 * pi; //当前动画值对应的总角度
     for (var bean in chartBeans) {
       var targetAngle = bean.startAngle + bean.sweepAngle;
-      paint..color = bean.color;
+      paint.color = bean.color;
       if (targetAngle <= realAngle) {
         canvas.drawArc(rect, bean.startAngle, bean.sweepAngle, true, paint);
       } else if (bean.startAngle < realAngle) {

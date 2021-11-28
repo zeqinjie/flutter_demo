@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
@@ -11,10 +10,10 @@ class ChartPieBean {
   double sweepAngle;
 
   ChartPieBean(
-      {@required this.value,
-      this.type,
-      this.rate,
-      this.color,
-      this.startAngle,
-      this.sweepAngle});
+      {required this.value,
+      this.type = "",
+      this.rate = 0,
+      this.color = Colors.black,
+      this.startAngle = 0,
+      this.sweepAngle = 0});
 }

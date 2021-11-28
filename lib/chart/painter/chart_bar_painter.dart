@@ -22,11 +22,11 @@ class ChartBarPainter extends BasePainter {
       rectRadiusBottomRight;
   bool _isAnimationEnd = false;
   bool isCanTouch;
-  Color rectShadowColor; //触摸时显示的阴影颜色
+  Color? rectShadowColor; //触摸时显示的阴影颜色
   bool isShowTouchShadow; //触摸时是否显示阴影
   bool isShowTouchValue; //触摸时是否显示值
   Offset? globalPosition; //触摸位置
-  Map<Rect, double> rectMap = new Map();
+  Map<Rect, double> rectMap = {};
 
   static const double defaultRectPadding = 8; //默认柱状图的间隔
   static const double basePadding = 16; //默认的边距
@@ -43,7 +43,7 @@ class ChartBarPainter extends BasePainter {
     this.isCanTouch = false,
     this.isShowTouchShadow = true,
     this.isShowTouchValue = false,
-    this.rectShadowColor = defaultColor,
+    this.rectShadowColor,
     this.globalPosition,
     this.rectRadius = 0,
     this.rectRadiusTopLeft = 0,
@@ -83,7 +83,7 @@ class ChartBarPainter extends BasePainter {
 
   ///x轴刻度
   void _drawX(Canvas canvas, Size size) {
-    if (chartBeans != null && chartBeans.isNotEmpty) {
+    if (chartBeans.isNotEmpty) {
       for (int i = 0; i < chartBeans.length; i++) {
         double x = startX + defaultRectPadding * i + rectWidth * i;
         TextPainter(
@@ -94,7 +94,7 @@ class ChartBarPainter extends BasePainter {
             text: TextSpan(
                 text: chartBeans[i].x,
                 style: TextStyle(
-                  color: fontColor != null ? fontColor : defaultColor,
+                  color: fontColor,
                   fontSize: fontSize,
                 )))
           ..layout(minWidth: rectWidth, maxWidth: rectWidth)
@@ -105,7 +105,7 @@ class ChartBarPainter extends BasePainter {
 
   ///柱状图
   void _drawBar(Canvas canvas, Size size) {
-    if (chartBeans == null || chartBeans.length == 0) return;
+    if (chartBeans.isEmpty) return;
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = 12
@@ -146,10 +146,10 @@ class ChartBarPainter extends BasePainter {
 
   ///绘制触摸
   void _drawOnPressed(Canvas canvas, Size size) {
-    print('globalPosition == $globalPosition');
+    // print('globalPosition == $globalPosition');
     if (!_isAnimationEnd) return;
     if (globalPosition == null) return;
-    if (chartBeans == null || chartBeans.length == 0 || maxMin[0] <= 0) return;
+    if (chartBeans.isEmpty || maxMin[0] <= 0) return;
     try {
       Offset? pointer = globalPosition;
 
@@ -172,7 +172,7 @@ class ChartBarPainter extends BasePainter {
           if (isShowTouchShadow) {
             var paint =  Paint()
               ..isAntiAlias = true
-              ..color = rectShadowColor; //?? defaultRectShadowColor.withOpacity(0.5);
+              ..color = rectShadowColor ?? defaultRectShadowColor.withOpacity(0.5);
             if (rectRadius != 0) {
               canvas.drawRRect(
                   RRect.fromRectAndRadius(
@@ -208,7 +208,7 @@ class ChartBarPainter extends BasePainter {
 
 
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     }
   }
 }

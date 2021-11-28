@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 class ChartBean {
   String x;
@@ -7,5 +6,5 @@ class ChartBean {
   Color color;
 
   ChartBean(
-      {@required this.x, @required this.y, this.millisSeconds, this.color});
+      {required this.x, required this.y, this.millisSeconds = 0, this.color = Colors.black});
 }
