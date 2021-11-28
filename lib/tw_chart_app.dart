@@ -17,7 +17,7 @@ class TWChartApp extends StatelessWidget {
       home: AnnotatedRegion(
         value: SystemUiOverlayStyle.light
             .copyWith(statusBarBrightness: Brightness.dark),
-        child: TWChartDemo(),
+        child: const TWChartDemo(),
       ),
     );
   }
@@ -30,7 +30,7 @@ class TWChartDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       children: <Widget>[
         _buildChartCurve(context),
         // _buildChartLine(context),
@@ -43,12 +43,11 @@ class TWChartDemo extends StatelessWidget {
     var chartLine = ChartLine(
       chartBeans: [
         ChartBean(x: '1月', y: 30.5),
-        ChartBean(x: '2月', y: 188.3),
+        ChartBean(x: '2月', y: 8.3),
         ChartBean(x: '3月', y: 120),
         ChartBean(x: '4月', y: 67),
         ChartBean(x: '5月', y: 10),
         ChartBean(x: '6月', y: 40),
-
       ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
@@ -57,6 +56,7 @@ class TWChartDemo extends StatelessWidget {
       lineColor: Colors.blueAccent,
       fontColor: Colors.grey,
       xyColor: Colors.white,
+      backgroundColor: Colors.yellow,
       isShowYValue: false,
       isShowXy: false,
       isShowXyRuler: false,
@@ -76,11 +76,11 @@ class TWChartDemo extends StatelessWidget {
       pressedPointRadius: 4,
       pressedHintLineWidth: 0.5,
       pressedHintLineColor: Colors.white,
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
     );
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       semanticContainer: true,
       color: Colors.green.withOpacity(0.5),
       child: chartLine,

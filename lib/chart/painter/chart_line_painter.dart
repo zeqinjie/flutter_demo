@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:tw_chart_demo/chart/chart_bean.dart';
@@ -7,7 +6,7 @@ import 'package:tw_chart_demo/chart/painter/base_painter.dart';
 class ChartLinePainter extends BasePainter {
   double value; //当前动画值
   List<ChartBean> chartBeans;
-  List<Color> shaderColors; //渐变色
+  List<Color>? shaderColors; //渐变色
   Color lineColor; //曲线或折线的颜色
   Color xyColor; //xy轴的颜色
   static const double basePadding = 16; //默认的边距
@@ -30,15 +29,15 @@ class ChartLinePainter extends BasePainter {
   Color fontColor;
   double lineWidth; //线宽
   double rulerWidth; //刻度的宽度或者高度
-  double startX, endX, startY, endY;
-  double _fixedHeight, _fixedWidth; //宽高
-  Path path;
-  Map<double, Offset> _points = new Map();
+  double startX = 0, endX = 0, startY = 0, endY = 0;
+  double _fixedHeight = 0, _fixedWidth = 0; //宽高
+  Path? path;
+  Map<double, Offset> _points =  Map();
 
   bool _isAnimationEnd = false;
   bool isCanTouch;
 
-  Offset globalPosition;
+  Offset? globalPosition;
   static const Color defaultColor = Colors.blue;
 
   ChartLinePainter(
@@ -59,7 +58,7 @@ class ChartLinePainter extends BasePainter {
     this.xyColor = defaultColor,
     this.yNum = 5,
     this.isShowFloat = false,
-    this.fontSize = 10,
+    this.fontSize = 12,
     this.fontColor = defaultColor,
     this.isCanTouch = false,
     this.globalPosition,
@@ -88,34 +87,8 @@ class ChartLinePainter extends BasePainter {
 
   ///初始化
   void _init(Size size) {
-    initValue();
     initBorder(size);
     initPath(size);
-  }
-
-  void initValue() {
-    if (lineColor == null) {
-      lineColor = defaultColor;
-    }
-    if (xyColor == null) {
-      xyColor = defaultColor;
-    }
-    if (fontColor == null) {
-      fontColor = defaultColor;
-    }
-    if (fontSize == null) {
-      fontSize = 10;
-    }
-    if (pressedHintLineColor == null) {
-      pressedHintLineColor = defaultColor;
-    }
-    if (yNum == null) {
-      yNum = 5;
-    }
-    if (isShowFloat == null) {
-      isShowFloat = false;
-    }
-
   }
 
   ///计算边界
@@ -141,7 +114,7 @@ class ChartLinePainter extends BasePainter {
           if (i == 0) {
             var key = startX;
             var value = (startY - chartBeans[i].y / maxMin[0] * _fixedHeight);
-            path.moveTo(key, value);
+            path!.moveTo(key, value);
             _points[key] = Offset(key, value);
             print("currentX:$key,currentY:$value");
             continue;
@@ -154,11 +127,11 @@ class ChartLinePainter extends BasePainter {
           _points[currentX] = Offset(currentX, currentY);
 
           if (isCurve) {
-            path.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
+            path!.cubicTo((preX + currentX) / 2, preY, (preX + currentX) / 2,
                 currentY, currentX, currentY);
           } else {
             print("currentX:$currentX,currentY:$currentY");
-            path.lineTo(currentX, currentY);
+            path!.lineTo(currentX, currentY);
           }
         }
       }
@@ -195,7 +168,7 @@ class ChartLinePainter extends BasePainter {
 
   ///x,y轴刻度 & 辅助线
   void drawRuler(Canvas canvas, Paint paint) {
-    if (chartBeans != null && chartBeans.length > 0) {
+    if (chartBeans != null && chartBeans.isNotEmpty) {
       int length = chartBeans.length > 7 ? 7 : chartBeans.length; //最多绘制7个
       double dw = _fixedWidth / (length - 1); //两个点之间的x方向距离
       double dh = _fixedHeight / (length - 1); //两个点之间的y方向距离
@@ -243,7 +216,7 @@ class ChartLinePainter extends BasePainter {
               ellipsis: '.',
               maxLines: 1,
               text: TextSpan(
-                  text: '$yValue',
+                  text: yValue,
                   style: TextStyle(color: fontColor, fontSize: fontSize)),
               textDirection: TextDirection.rtl)
             ..layout(minWidth: 40, maxWidth: 40)
@@ -262,7 +235,7 @@ class ChartLinePainter extends BasePainter {
 
   ///曲线或折线
   void _drawLine(Canvas canvas, Size size) {
-    if (chartBeans == null || chartBeans.length == 0) return;
+    if (chartBeans == null || chartBeans.isEmpty) return;
     var paint = Paint()
       ..isAntiAlias = true
       ..strokeWidth = lineWidth
@@ -271,15 +244,15 @@ class ChartLinePainter extends BasePainter {
       ..style = PaintingStyle.stroke;
 
     if (maxMin[0] <= 0) return;
-    var pathMetrics = path.computeMetrics(forceClosed: false);
+    var pathMetrics = path!.computeMetrics(forceClosed: false);
     var list = pathMetrics.toList();
     var length = value * list.length.toInt();
-    Path linePath = new Path();
-    Path shadowPath = new Path();
+    Path linePath =  Path();
+    Path shadowPath =  Path();
     for (int i = 0; i < length; i++) {
       var extractPath =
           list[i].extractPath(0, list[i].length * value, startWithMoveTo: true);
-      linePath.addPath(extractPath, Offset(0, 0));
+      linePath.addPath(extractPath, const Offset(0, 0));
       shadowPath = extractPath;
     }
 
@@ -289,7 +262,7 @@ class ChartLinePainter extends BasePainter {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               tileMode: TileMode.clamp,
-              colors: shaderColors)
+              colors: shaderColors!)
           .createShader(Rect.fromLTRB(startX, endY, startX, startY));
 
       ///从path的最后一个点连接起始点，形成一个闭环
@@ -299,9 +272,9 @@ class ChartLinePainter extends BasePainter {
         ..close();
 
       canvas
-        ..drawPath(
+        .drawPath(
             shadowPath,
-            new Paint()
+             Paint()
               ..shader = shader
               ..isAntiAlias = true
               ..style = PaintingStyle.fill);
@@ -314,17 +287,17 @@ class ChartLinePainter extends BasePainter {
   ///绘制点
   void _drawPoints(Canvas canvas, Size size) {
     if (!isShowPoints) return;
-    var hintLinePaint = new Paint()
+    var hintLinePaint =  Paint()
       ..color = pointsColor
       ..isAntiAlias = true
       ..strokeWidth = pressedPointRadius;
 
     _points.forEach((double key, Offset off){
       canvas
-        ..drawCircle(off, pressedPointRadius,
+        .drawCircle(off, pressedPointRadius,
             hintLinePaint..color = pointsColor);
       canvas
-        ..drawCircle(off, pressedPointRadius/2,
+        .drawCircle(off, pressedPointRadius/2,
             hintLinePaint..color = Colors.white);
     });
 
@@ -335,62 +308,64 @@ class ChartLinePainter extends BasePainter {
     print('globalPosition == $globalPosition');
     if (!_isAnimationEnd) return;
     if (globalPosition == null) return;
-    if (chartBeans == null || chartBeans.length == 0 || maxMin[0] <= 0) return;
+    if (chartBeans == null || chartBeans.isEmpty || maxMin[0] <= 0) return;
     try {
-      Offset pointer = globalPosition;
+      Offset? pointer = globalPosition;
+      if(pointer != null) {
+        ///修复x轴越界
+        if (pointer!.dx < startX) pointer = Offset(startX, pointer.dy);
+        if (pointer!.dx > endX) pointer = Offset(endX, pointer.dy);
 
-      ///修复x轴越界
-      if (pointer.dx < startX) pointer = Offset(startX, pointer.dy);
-      if (pointer.dx > endX) pointer = Offset(endX, pointer.dy);
-
-      double currentX, currentY;
-      int length = chartBeans.length > 7 ? 7 : chartBeans.length;
-      double W = _fixedWidth / (length - 1); //两个点之间的x方向距离
-      for (int i = 0; i < length; i++) {
-        currentX = startX + W * i;
-        currentY = chartBeans[i].y;
-        if (currentX - W / 2 <= pointer.dx && pointer.dx <= currentX + W / 2) {
-          pointer = _points[currentX];
-          break;
+        double currentX = 0, currentY = 0;
+        int length = chartBeans.length > 7 ? 7 : chartBeans.length;
+        double W = _fixedWidth / (length - 1); //两个点之间的x方向距离
+        for (int i = 0; i < length; i++) {
+          currentX = startX + W * i;
+          currentY = chartBeans[i].y;
+          if (currentX - W / 2 <= pointer!.dx && pointer!.dx <= currentX + W / 2) {
+            pointer = _points[currentX];
+            break;
+          }
         }
-      }
 
-      var hintLinePaint = new Paint()
-        ..color = pressedHintLineColor
-        ..isAntiAlias = true;
-      canvas
-        ..drawCircle(pointer, pressedPointRadius,
-            hintLinePaint..strokeWidth = pressedPointRadius);
-      if (isShowPressedHintLine) {
+        var hintLinePaint =  Paint()
+          ..color = pressedHintLineColor
+          ..isAntiAlias = true;
         canvas
-          ..drawLine(
-              Offset(startX, pointer.dy),
-              Offset(endX + basePadding, pointer.dy),
-              hintLinePaint..strokeWidth = pressedHintLineWidth)
-          ..drawLine(
-              Offset(pointer.dx, startY),
-              Offset(pointer.dx, endY - basePadding),
-              hintLinePaint..strokeWidth = pressedHintLineWidth);
+            .drawCircle(pointer!, pressedPointRadius,
+              hintLinePaint..strokeWidth = pressedPointRadius);
+        if (isShowPressedHintLine) {
+          canvas
+            ..drawLine(
+                Offset(startX, pointer!.dy),
+                Offset(endX + basePadding, pointer!.dy),
+                hintLinePaint..strokeWidth = pressedHintLineWidth)
+            ..drawLine(
+                Offset(pointer.dx, startY),
+                Offset(pointer.dx, endY - basePadding),
+                hintLinePaint..strokeWidth = pressedHintLineWidth);
+        }
+
+        ///绘制文本
+        var yValue = currentY.toStringAsFixed(isShowFloat ? 1 : 0);
+        TextPainter(
+            textAlign: TextAlign.center,
+            ellipsis: '.',
+            maxLines: 1,
+            text: TextSpan(
+                text: yValue,
+                style: TextStyle(color: fontColor, fontSize: fontSize)),
+            textDirection: TextDirection.ltr)
+          ..layout(minWidth: 40, maxWidth: 40)
+          ..paint(
+              canvas,
+              Offset(
+                  pointer.dx,
+                  startY - pointer.dy < basePadding * 2
+                      ? pointer.dy - basePadding
+                      : pointer.dy + pressedPointRadius * 2));
       }
 
-      ///绘制文本
-      var yValue = currentY.toStringAsFixed(isShowFloat ? 1 : 0);
-      TextPainter(
-          textAlign: TextAlign.center,
-          ellipsis: '.',
-          maxLines: 1,
-          text: TextSpan(
-              text: "$yValue",
-              style: TextStyle(color: fontColor, fontSize: fontSize)),
-          textDirection: TextDirection.ltr)
-        ..layout(minWidth: 40, maxWidth: 40)
-        ..paint(
-            canvas,
-            Offset(
-                pointer.dx,
-                startY - pointer.dy < basePadding * 2
-                    ? pointer.dy - basePadding
-                    : pointer.dy + pressedPointRadius * 2));
     } catch (e) {
       print(e.toString());
     }

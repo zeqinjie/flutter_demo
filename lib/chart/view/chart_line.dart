@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:tw_chart_demo/chart/chart_bean.dart';
@@ -9,10 +8,10 @@ class ChartLine extends StatefulWidget {
   final double lineWidth; //线宽
   final bool isCurve; //标记是否为曲线
   final List<ChartBean> chartBeans;
-  final List<Color> shaderColors; //Line渐变色
+  final List<Color>? shaderColors; //Line渐变色
   final Color lineColor; //曲线或折线的颜色
   final Color xyColor; //xy轴的颜色
-  final Color backgroundColor; //绘制的背景色
+  final Color? backgroundColor; //绘制的背景色
   final bool isShowYValue; //是否显示y轴数值
   final bool isShowXy; //是否显示坐标轴
   final bool isShowXyRuler; //是否显示xy刻度
@@ -33,14 +32,14 @@ class ChartLine extends StatefulWidget {
   final Color pressedHintLineColor; //触摸辅助线颜色
 
   const ChartLine({
-    Key key,
-    @required this.size,
-    @required this.chartBeans,
+    Key? key,
+    required this.size,
+    required this.chartBeans,
     this.lineWidth = 4,
     this.isCurve = true,
     this.shaderColors,
-    this.lineColor,
-    this.xyColor,
+    this.lineColor = ChartLinePainter.defaultColor,
+    this.xyColor = ChartLinePainter.defaultColor,
     this.backgroundColor,
     this.isShowXy = true,
     this.isShowYValue = true,
@@ -49,10 +48,10 @@ class ChartLine extends StatefulWidget {
     this.isShowHintY = false,
     this.isShowBorderTop = false,
     this.isShowBorderRight = false,
-    this.yNum,
-    this.isShowFloat,
-    this.fontSize,
-    this.fontColor,
+    this.yNum = 8,
+    this.isShowFloat = true,
+    this.fontSize = 12,
+    this.fontColor = Colors.grey,
     this.rulerWidth = 8,
     this.duration = const Duration(milliseconds: 800),
     this.isAnimation = true,
@@ -61,7 +60,7 @@ class ChartLine extends StatefulWidget {
     this.isShowPressedHintLine = true,
     this.pressedPointRadius = 4,
     this.pressedHintLineWidth = 0.5,
-    this.pressedHintLineColor,
+    this.pressedHintLineColor = Colors.white,
   })  : assert(lineColor != null),
         assert(size != null),
         super(key: key);
@@ -72,36 +71,39 @@ class ChartLine extends StatefulWidget {
 
 class ChartLineState extends State<ChartLine>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
+  AnimationController? _controller;
   double _value = 0;
   double begin = 0.0, end = 1.0;
-  Offset globalPosition;
+  Offset? globalPosition;
 
   @override
   void initState() {
     super.initState();
     if (widget.isAnimation) {
       _controller = AnimationController(vsync: this, duration: widget.duration);
-      Tween(begin: begin, end: end).animate(_controller)
+      if(_controller == null) {
+        return;
+      }
+      Tween(begin: begin, end: end).animate(_controller!)
         ..addStatusListener((status) {
           if (status == AnimationStatus.completed) {
             if (widget.isReverse) {
-              _controller.repeat(reverse: widget.isReverse);
+              _controller!.repeat(reverse: widget.isReverse);
             }
             print('绘制完成');
           }
         })
         ..addListener(() {
-          _value = _controller.value;
+          _value = _controller!.value;
           setState(() {});
         });
-      _controller.forward();
+      _controller!.forward();
     }
   }
 
   @override
   void dispose() {
-    if (_controller != null) _controller.dispose();
+    if (_controller != null) _controller!.dispose();
     super.dispose();
   }
 
