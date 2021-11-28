@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tw_chart_demo/chart/chart_bean.dart';
-import 'package:tw_chart_demo/chart/chart_pie_bean.dart';
-import 'package:tw_chart_demo/chart/view/chart_bar.dart';
-import 'package:tw_chart_demo/chart/view/chart_line.dart';
-import 'package:tw_chart_demo/chart/view/chart_pie.dart';
 
-///@Description     xxxx
+import 'chart/tw_chart_bean.dart';
+import 'chart/tw_chart_pie_bean.dart';
+import 'chart/view/tw_chart_bar.dart';
+import 'chart/view/tw_chart_line.dart';
+import 'chart/view/tw_chart_pie.dart';
+
+///@Description     图表 demo 入口
 ///@author          zhengzeqin
 ///@create          2021-11-28 11:29 
 
@@ -35,10 +36,10 @@ class TWChartDemo extends StatelessWidget {
     return ListView(
       physics: const BouncingScrollPhysics(),
       children: <Widget>[
-        // _buildChartCurve(context),
-        // _buildChartLine(context),
-        // _buildChartBarCircle(context),
-        // _buildChartBarRound(context),
+        _buildChartCurve(context),
+        _buildChartLine(context),
+        _buildChartBarCircle(context),
+        _buildChartBarRound(context),
         _buildChartPie(context)
       ],
     );
@@ -46,14 +47,14 @@ class TWChartDemo extends StatelessWidget {
 
   ///curve
   Widget _buildChartCurve(context) {
-    var chartLine = ChartLine(
+    var chartLine = TWChartLine(
       chartBeans: [
-        ChartBean(x: '1月', y: 30.5),
-        ChartBean(x: '2月', y: 8.3),
-        ChartBean(x: '3月', y: 120),
-        ChartBean(x: '4月', y: 67),
-        ChartBean(x: '5月', y: 10),
-        ChartBean(x: '6月', y: 100),
+        TWChartBean(x: '1月', y: 30.5),
+        TWChartBean(x: '2月', y: 8.3),
+        TWChartBean(x: '3月', y: 120),
+        TWChartBean(x: '4月', y: 67),
+        TWChartBean(x: '5月', y: 10),
+        TWChartBean(x: '6月', y: 100),
       ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
@@ -96,15 +97,15 @@ class TWChartDemo extends StatelessWidget {
 
   ///line
   Widget _buildChartLine(context) {
-    var chartLine = ChartLine(
+    var chartLine = TWChartLine(
       chartBeans: [
-        ChartBean(x: '12-01', y: 30),
-        ChartBean(x: '12-02', y: 88),
-        ChartBean(x: '12-03', y: 20),
-        ChartBean(x: '12-04', y: 67),
-        ChartBean(x: '12-05', y: 10),
-        ChartBean(x: '12-06', y: 40),
-        ChartBean(x: '12-07', y: 10),
+        TWChartBean(x: '12-01', y: 30),
+        TWChartBean(x: '12-02', y: 88),
+        TWChartBean(x: '12-03', y: 20),
+        TWChartBean(x: '12-04', y: 67),
+        TWChartBean(x: '12-05', y: 10),
+        TWChartBean(x: '12-06', y: 40),
+        TWChartBean(x: '12-07', y: 10),
       ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.6),
@@ -140,15 +141,15 @@ class TWChartDemo extends StatelessWidget {
 
   ///bar-circle
   Widget _buildChartBarCircle(context) {
-    var chartBar = ChartBar(
+    var chartBar = TWChartBar(
       chartBeans: [
-        ChartBean(x: '12-01', y: 30, color: Colors.red),
-        ChartBean(x: '12-02', y: 100, color: Colors.yellow),
-        ChartBean(x: '12-03', y: 70, color: Colors.green),
-        ChartBean(x: '12-04', y: 70, color: Colors.blue),
-        ChartBean(x: '12-05', y: 30, color: Colors.deepPurple),
-        ChartBean(x: '12-06', y: 90, color: Colors.deepOrange),
-        ChartBean(x: '12-07', y: 50, color: Colors.greenAccent)
+        TWChartBean(x: '12-01', y: 30, color: Colors.red),
+        TWChartBean(x: '12-02', y: 100, color: Colors.yellow),
+        TWChartBean(x: '12-03', y: 70, color: Colors.green),
+        TWChartBean(x: '12-04', y: 70, color: Colors.blue),
+        TWChartBean(x: '12-05', y: 30, color: Colors.black),
+        TWChartBean(x: '12-06', y: 90, color: Colors.deepOrange),
+        TWChartBean(x: '12-07', y: 50, color: Colors.greenAccent)
       ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
@@ -176,15 +177,15 @@ class TWChartDemo extends StatelessWidget {
 
   ///bar-round
   Widget _buildChartBarRound(context) {
-    var chartBar = ChartBar(
+    var chartBar = TWChartBar(
       chartBeans: [
-        ChartBean(x: '12-01', y: 30, color: Colors.red),
-        ChartBean(x: '12-02', y: 100, color: Colors.yellow),
-        ChartBean(x: '12-03', y: 70, color: Colors.green),
-        ChartBean(x: '12-04', y: 70, color: Colors.blue),
-        ChartBean(x: '12-05', y: 30, color: Colors.deepPurple),
-        ChartBean(x: '12-06', y: 90, color: Colors.deepOrange),
-        ChartBean(x: '12-07', y: 50, color: Colors.greenAccent)
+        TWChartBean(x: '12-01', y: 30, color: Colors.red),
+        TWChartBean(x: '12-02', y: 100, color: Colors.yellow),
+        TWChartBean(x: '12-03', y: 70, color: Colors.green),
+        TWChartBean(x: '12-04', y: 70, color: Colors.blue),
+        TWChartBean(x: '12-05', y: 30, color: Colors.black),
+        TWChartBean(x: '12-06', y: 90, color: Colors.deepOrange),
+        TWChartBean(x: '12-07', y: 50, color: Colors.greenAccent)
       ],
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height / 5 * 1.8),
@@ -212,13 +213,13 @@ class TWChartDemo extends StatelessWidget {
 
   ///pie
   Widget _buildChartPie(context) {
-    var chartPie = ChartPie(
+    var chartPie = TWChartPie(
       chartBeans: [
-        ChartPieBean(type: '话费', value: 30, color: Colors.blueGrey),
-        ChartPieBean(type: '零食', value: 120, color: Colors.deepPurple),
-        ChartPieBean(type: '衣服', value: 60, color: Colors.green),
-        ChartPieBean(type: '早餐', value: 60, color: Colors.blue),
-        ChartPieBean(type: '水果', value: 30, color: Colors.red),
+        TWChartPieBean(type: '话费', value: 30, color: Colors.blueGrey),
+        TWChartPieBean(type: '零食', value: 120, color: Colors.deepPurple),
+        TWChartPieBean(type: '衣服', value: 60, color: Colors.green),
+        TWChartPieBean(type: '早餐', value: 60, color: Colors.blue),
+        TWChartPieBean(type: '水果', value: 30, color: Colors.red),
       ],
       size: Size(
           MediaQuery.of(context).size.width, MediaQuery.of(context).size.width),

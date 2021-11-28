@@ -1,12 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:tw_chart_demo/chart/painter/chart_pie_painter.dart';
-import '../chart_pie_bean.dart';
+import '../painter/tw_chart_pie_painter.dart';
+import '../tw_chart_pie_bean.dart';
 
-class ChartPie extends StatefulWidget {
+class TWChartPie extends StatefulWidget {
   final Duration duration;
   final Size size;
-  final List<ChartPieBean> chartBeans;
+  final List<TWChartPieBean> chartBeans;
   final Color? backgroundColor; //绘制的背景色
   final bool isAnimation; //是否执行动画
   final double R, centerR; //半径,中心圆半径
@@ -14,7 +14,7 @@ class ChartPie extends StatefulWidget {
   final double fontSize; //刻度文本大小
   final Color fontColor; //文本颜色
 
-  const ChartPie({
+  const TWChartPie({
     Key? key,
     required this.size,
     required this.chartBeans,
@@ -29,10 +29,10 @@ class ChartPie extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ChartPieState();
+  State<StatefulWidget> createState() => TWChartPieState();
 }
 
-class ChartPieState extends State<ChartPie>
+class TWChartPieState extends State<TWChartPie>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   double _value = 0;
@@ -66,7 +66,7 @@ class ChartPieState extends State<ChartPie>
 
   @override
   Widget build(BuildContext context) {
-    var painter = ChartPiePainter(
+    var painter = TWChartPiePainter(
       widget.chartBeans,
       value: _value,
       R: widget.R,

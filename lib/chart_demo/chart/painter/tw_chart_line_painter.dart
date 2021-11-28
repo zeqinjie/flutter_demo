@@ -1,11 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:tw_chart_demo/chart/chart_bean.dart';
-import 'package:tw_chart_demo/chart/painter/base_painter.dart';
+import '../tw_chart_bean.dart';
+import 'tw_base_painter.dart';
 
-class ChartLinePainter extends BasePainter {
+class TWChartLinePainter extends TWBasePainter {
   double value; // 当前动画值
-  List<ChartBean> chartBeans;
+  List<TWChartBean> chartBeans;
   List<Color>? shaderColors; //渐变色
   Color lineColor; //曲线或折线的颜色
   Color xyColor; //xy轴的颜色
@@ -40,7 +40,7 @@ class ChartLinePainter extends BasePainter {
   Offset? globalPosition;
   static const Color defaultColor = Colors.blue;
 
-  ChartLinePainter(
+  TWChartLinePainter(
     this.chartBeans,
     this.lineColor, {
     this.lineWidth = 4,
@@ -80,7 +80,7 @@ class ChartLinePainter extends BasePainter {
   }
 
   @override
-  bool shouldRepaint(ChartLinePainter oldDelegate) {
+  bool shouldRepaint(TWChartLinePainter oldDelegate) {
     _isAnimationEnd = oldDelegate.value == value;
     return oldDelegate.value != value || isCanTouch;
   }

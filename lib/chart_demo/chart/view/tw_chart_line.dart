@@ -1,13 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:tw_chart_demo/chart/chart_bean.dart';
-import 'package:tw_chart_demo/chart/painter/chart_line_painter.dart';
+import '../painter/tw_chart_line_painter.dart';
+import '../tw_chart_bean.dart';
 
-class ChartLine extends StatefulWidget {
+class TWChartLine extends StatefulWidget {
   final Size size; //宽高
   final double lineWidth; //线宽
   final bool isCurve; //标记是否为曲线
-  final List<ChartBean> chartBeans;
+  final List<TWChartBean> chartBeans;
   final List<Color>? shaderColors; //Line渐变色
   final Color lineColor; //曲线或折线的颜色
   final Color xyColor; //xy轴的颜色
@@ -31,15 +31,15 @@ class ChartLine extends StatefulWidget {
   final double pressedHintLineWidth; //触摸辅助线宽度
   final Color pressedHintLineColor; //触摸辅助线颜色
 
-  const ChartLine({
+  const TWChartLine({
     Key? key,
     required this.size,
     required this.chartBeans,
     this.lineWidth = 4,
     this.isCurve = true,
     this.shaderColors,
-    this.lineColor = ChartLinePainter.defaultColor,
-    this.xyColor = ChartLinePainter.defaultColor,
+    this.lineColor = TWChartLinePainter.defaultColor,
+    this.xyColor = TWChartLinePainter.defaultColor,
     this.backgroundColor,
     this.isShowXy = true,
     this.isShowYValue = true,
@@ -64,10 +64,10 @@ class ChartLine extends StatefulWidget {
   })  : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ChartLineState();
+  State<StatefulWidget> createState() => TWChartLineState();
 }
 
-class ChartLineState extends State<ChartLine>
+class TWChartLineState extends State<TWChartLine>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   double _value = 0;
@@ -107,7 +107,7 @@ class ChartLineState extends State<ChartLine>
 
   @override
   Widget build(BuildContext context) {
-    var painter = ChartLinePainter(widget.chartBeans, widget.lineColor,
+    var painter = TWChartLinePainter(widget.chartBeans, widget.lineColor,
         shaderColors: widget.shaderColors,
         isCurve: widget.isCurve,
         lineWidth: widget.lineWidth,

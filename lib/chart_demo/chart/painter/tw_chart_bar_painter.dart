@@ -1,12 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:tw_chart_demo/chart/chart_bean.dart';
-import 'package:tw_chart_demo/chart/painter/base_painter.dart';
+import '../tw_chart_bean.dart';
+import 'tw_base_painter.dart';
 
-class ChartBarPainter extends BasePainter {
+class TWChartBarPainter extends TWBasePainter {
   double _fixedHeight = 0, _fixedWidth = 0; //宽高
   double value; //当前动画值
-  List<ChartBean> chartBeans;
+  List<TWChartBean> chartBeans;
   double startX = 0, endX = 0, startY = 0, endY = 0;
   List<double> maxMin = [0, 0]; //存储极值
   Color rectColor; //柱状图默认的颜色
@@ -33,7 +33,7 @@ class ChartBarPainter extends BasePainter {
   static const Color defaultColor = Colors.deepPurple;
   static const Color defaultRectShadowColor = Colors.white;
 
-  ChartBarPainter(
+  TWChartBarPainter(
     this.chartBeans,
     this.rectColor, {
     this.value = 1,
@@ -61,7 +61,7 @@ class ChartBarPainter extends BasePainter {
   }
 
   @override
-  bool shouldRepaint(ChartBarPainter oldDelegate) {
+  bool shouldRepaint(TWChartBarPainter oldDelegate) {
     _isAnimationEnd = oldDelegate.value == value;
     return oldDelegate.value != value || isCanTouch;
   }

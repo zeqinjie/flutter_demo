@@ -1,12 +1,12 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:tw_chart_demo/chart/painter/base_painter.dart';
-import '../chart_pie_bean.dart';
+import '../tw_chart_pie_bean.dart';
+import 'tw_base_painter.dart';
 
-class ChartPiePainter extends BasePainter {
+class TWChartPiePainter extends TWBasePainter {
   double value; //当前动画值
-  List<ChartPieBean> chartBeans;
+  List<TWChartPieBean> chartBeans;
   double startX = 0, endX = 0, startY = 0, endY = 0;
   double R, centerR; //圆弧半径,中心圆半径
   double centerX = 0, centerY = 0; //圆心
@@ -16,7 +16,7 @@ class ChartPiePainter extends BasePainter {
   static const double basePadding = 16; //默认的边距
   static const Color defaultColor = Colors.deepPurple;
 
-  ChartPiePainter(
+  TWChartPiePainter(
     this.chartBeans, {
     this.value = 1,
     this.R = 0,
@@ -34,7 +34,7 @@ class ChartPiePainter extends BasePainter {
   }
 
   @override
-  bool shouldRepaint(ChartPiePainter oldDelegate) {
+  bool shouldRepaint(TWChartPiePainter oldDelegate) {
     return oldDelegate.value != value;
   }
 
@@ -101,7 +101,7 @@ class ChartPiePainter extends BasePainter {
   }
 
   ///计算数据总和
-  getTotal(List<ChartPieBean> data) {
+  getTotal(List<TWChartPieBean> data) {
     double total = 0;
     for (var bean in data) {
       total += bean.value;

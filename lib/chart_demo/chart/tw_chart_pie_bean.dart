@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class ChartPieBean {
+class TWChartPieBean {
   double value;
   String type;
   double rate;
@@ -9,7 +9,7 @@ class ChartPieBean {
   double startAngle;
   double sweepAngle;
 
-  ChartPieBean(
+  TWChartPieBean(
       {required this.value,
       this.type = "",
       this.rate = 0,

@@ -1,12 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:tw_chart_demo/chart/chart_bean.dart';
-import 'package:tw_chart_demo/chart/painter/chart_bar_painter.dart';
+import '../painter/tw_chart_bar_painter.dart';
+import '../tw_chart_bean.dart';
 
-class ChartBar extends StatefulWidget {
+class TWChartBar extends StatefulWidget {
   final Duration duration;
   final Size size;
-  final List<ChartBean> chartBeans;
+  final List<TWChartBean> chartBeans;
   final Color rectColor; //柱状图默认的颜色
   final Color? backgroundColor; //绘制的背景色
   final bool isShowX; //是否显示x刻度
@@ -25,18 +25,18 @@ class ChartBar extends StatefulWidget {
   final bool isShowTouchShadow; //触摸时是否显示阴影
   final bool isShowTouchValue; //触摸时是否显示值
 
-  const ChartBar({
+  const TWChartBar({
     Key? key,
     required this.size,
     required this.chartBeans,
     this.duration = const Duration(milliseconds: 800),
     required this.rectColor,
-    this.backgroundColor = ChartBarPainter.defaultColor,
+    this.backgroundColor = TWChartBarPainter.defaultColor,
     this.isShowX = false,
     this.isAnimation = true,
     this.isReverse = false,
     this.fontSize = 12,
-    this.fontColor = ChartBarPainter.defaultColor,
+    this.fontColor = TWChartBarPainter.defaultColor,
     this.rectShadowColor,
     this.isCanTouch = false,
     this.isShowTouchShadow = true,
@@ -50,10 +50,10 @@ class ChartBar extends StatefulWidget {
         super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ChartBarState();
+  State<StatefulWidget> createState() => TWChartBarState();
 }
 
-class ChartBarState extends State<ChartBar>
+class TWChartBarState extends State<TWChartBar>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   double _value = 0;
@@ -92,7 +92,7 @@ class ChartBarState extends State<ChartBar>
 
   @override
   Widget build(BuildContext context) {
-    var painter = ChartBarPainter(
+    var painter = TWChartBarPainter(
       widget.chartBeans,
       widget.rectColor,
       isShowX: widget.isShowX,

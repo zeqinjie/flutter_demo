@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-class ChartBean {
+class TWChartBean {
   String x;
   double y;
   int millisSeconds;
   Color color;
 
-  ChartBean(
+  TWChartBean(
       {required this.x, required this.y, this.millisSeconds = 0, this.color = Colors.black});
 }
