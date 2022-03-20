@@ -18,14 +18,15 @@ class _TWAnimationImplicitViewState extends State<TWAnimationImplicitView> {
   bool _isEnd = false;
   double _counterBegin = 0;
   double _counterEnd = 10;
+  double _count = 0;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         const Align(
-          alignment: Alignment.topCenter,
-          child:  SafeArea(
+          alignment: Alignment.bottomCenter,
+          child: SafeArea(
             child: Text(
               "隐式动画",
               style: TextStyle(
@@ -38,7 +39,8 @@ class _TWAnimationImplicitViewState extends State<TWAnimationImplicitView> {
         // _buildAnimatedContainer(),
         // _buildCurvesAnimated(),
         // _buildTweenAnimated(),
-        _buildAnimatedCounter(),
+        // _buildAnimatedCounter(),
+        _buildTWAnimatedCounter(),
         Positioned(
           right: 0,
           bottom: 0,
@@ -60,6 +62,7 @@ class _TWAnimationImplicitViewState extends State<TWAnimationImplicitView> {
                   final _counterTemp = _counterBegin;
                   _counterBegin = _counterEnd;
                   _counterEnd = _counterTemp;
+                  _count++;
                 });
               },
             ),
@@ -215,6 +218,77 @@ class _TWAnimationImplicitViewState extends State<TWAnimationImplicitView> {
           },
         ),
       ),
+    );
+  }
+
+  /// 滚动的计算器
+  Widget _buildTWAnimatedCounter() {
+    const fontSize = 100.0;
+    return Center(
+      child: Container(
+        color: Colors.blue,
+        width: 200,
+        height: 120,
+        child: TWAnimatedCounter(
+          fontSize: fontSize,
+          count: _count,
+        ),
+      ),
+    );
+  }
+}
+
+/// 封装计数器
+class TWAnimatedCounter extends StatelessWidget {
+  final Duration? duration;
+  final double fontSize;
+  final double count;
+
+  const TWAnimatedCounter({
+    Key? key,
+    this.duration,
+    this.fontSize = 100,
+    this.count = 0,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder(
+      duration: duration ?? const Duration(seconds: 1),
+      tween: Tween(end: count),
+      builder: (BuildContext context, double value, Widget? child) {
+        final whole = value ~/ 1; // 取整数
+        final decimal = value - whole; // 取小数
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              top: -fontSize * decimal, // 0 -> -100
+              child: Opacity(
+                opacity: 1.0 - decimal, // 1.0 -> 0.0
+                child: Text(
+                  "$whole",
+                  style: TextStyle(
+                    fontSize: fontSize,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: fontSize - decimal * fontSize, // 100 -> 0
+              child: Opacity(
+                opacity: decimal, // 0 -> 1.0
+                child: Text(
+                  "${whole + 1}",
+                  style: TextStyle(
+                    fontSize: fontSize,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
