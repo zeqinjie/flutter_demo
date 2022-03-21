@@ -30,7 +30,7 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
       duration: const Duration(milliseconds: 1000),
     );
     _controller.addListener(() {
-        print("${_controller.value}");
+      print("${_controller.value}");
     });
   }
 
@@ -55,6 +55,7 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
             _buildRotationTransition(),
             _buildFadeTransition(),
             _buildScaleTransition(),
+            _buildTweenAnimation(),
           ],
         ),
         Positioned(
@@ -68,7 +69,8 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
                   if (_isLoading) {
                     _controller.stop(); // reset: 重置恢复   stop: 暂停
                   } else {
-                    _controller.repeat(reverse: true); // forward: 执行一次  repeat: 重复执行
+                    _controller.repeat(
+                        reverse: true); // forward: 执行一次  repeat: 重复执行
                   }
                   _isLoading = !_isLoading;
                 });
@@ -118,6 +120,37 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
           color: Colors.yellow,
         ),
       ),
+    );
+  }
+
+  /// tween 关键帧动画
+  /// 通过 _controller.drive(Tween(...)) 添加 Tween 关键帧开始与结束值。
+  /// 等价的写法 Tween(...).animate(_controller)
+  /// chain 叠加一个 tween Interval(0.8, 1.0) 即表示 从时间 80% 之前的时间动画不执行，剩余 20% 时间完成动画
+  /// 在 Slide 平移动画中，offset 是以 （0，0）原点。偏移 0.5 即是 0.5 倍数
+  Widget _buildTweenAnimation() {
+    return SlideTransition(
+      child: Container(
+        height: 100,
+        width: 100,
+        color: Colors.red,
+      ),
+      position: Tween(
+        begin: const Offset(0, 0),
+        end: const Offset(0.5, 1),
+      )
+          .chain(
+            CurveTween(
+              curve: const Interval(0.8, 1.0) , // Curves.bounceOut
+            ),
+          )
+          .animate(_controller),
+      // position: _controller.drive(
+      //   Tween(
+      //     begin: const Offset(0, 0),
+      //     end: const Offset(0.5, 1),
+      //   ),
+      // ),
     );
   }
 }
