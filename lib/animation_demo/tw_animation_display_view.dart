@@ -50,14 +50,15 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
             ),
           ),
         ),
-        Column(
-          children: [
-            _buildRotationTransition(),
-            _buildFadeTransition(),
-            _buildScaleTransition(),
-            _buildTweenAnimation(),
-          ],
-        ),
+        // Column(
+        //   children: [
+        //     _buildRotationTransition(),
+        //     _buildFadeTransition(),
+        //     _buildScaleTransition(),
+        //     _buildTweenAnimation(),
+        //   ],
+        // ),
+        Align(child: _buildSlidingBoxAnimation()),
         Positioned(
           right: 0,
           bottom: 0,
@@ -69,8 +70,7 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
                   if (_isLoading) {
                     _controller.stop(); // reset: 重置恢复   stop: 暂停
                   } else {
-                    _controller.repeat(
-                        reverse: true); // forward: 执行一次  repeat: 重复执行
+                    _controller.repeat(reverse: true); // forward: 执行一次  repeat: 重复执行
                   }
                   _isLoading = !_isLoading;
                 });
@@ -141,7 +141,7 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
       )
           .chain(
             CurveTween(
-              curve: const Interval(0.8, 1.0) , // Curves.bounceOut
+              curve: const Interval(0.8, 1.0), // Curves.bounceOut
             ),
           )
           .animate(_controller),
@@ -151,6 +151,57 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
       //     end: const Offset(0.5, 1),
       //   ),
       // ),
+    );
+  }
+
+  Widget _buildSlidingBoxAnimation() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.1), interval: const Interval(0.0, 0.2)),
+        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.3), interval: const Interval(0.2, 0.4)),
+        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.5), interval: const Interval(0.4, 0.6)),
+        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.7), interval: const Interval(0.6, 0.8)),
+        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.9), interval: const Interval(0.8, 1.0)),
+        TWSlidingBox(controller: _controller, color: Colors.blue, interval: const Interval(0.8, 1.0)),
+      ],
+    );
+  }
+}
+
+/// 交错动画
+class TWSlidingBox extends StatelessWidget {
+  final AnimationController controller;
+  final Color color;
+  final Interval interval;
+
+  const TWSlidingBox({
+    Key? key,
+    required this.controller,
+    required this.color,
+    required this.interval,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      child: Container(
+        alignment: Alignment.center,
+        width: 300,
+        height: 100,
+        color: color,
+      ),
+      position: Tween(
+        begin: Offset.zero,
+        end: const Offset(0.1, 0),
+      )
+          .chain(
+            CurveTween(curve: interval),
+          )
+          .chain(
+            CurveTween(curve: Curves.bounceInOut),   // g(f(x))
+          )
+          .animate(controller),
     );
   }
 }
