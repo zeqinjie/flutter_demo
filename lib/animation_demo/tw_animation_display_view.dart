@@ -58,7 +58,8 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
         //     _buildTweenAnimation(),
         //   ],
         // ),
-        Align(child: _buildSlidingBoxAnimation()),
+        // Align(child: _buildSlidingBoxAnimation()),
+        Align(child: _buildCustomAnimation()),
         Positioned(
           right: 0,
           bottom: 0,
@@ -154,6 +155,8 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
     );
   }
 
+
+  /// 交错动画展示
   Widget _buildSlidingBoxAnimation() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,6 +170,29 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
       ],
     );
   }
+
+  /// 自定义动画
+  Widget _buildCustomAnimation() {
+    final Animation opacityAnimation = Tween(begin: 0.5, end: 0.8).animate(_controller);
+    final Animation heightAnimation = Tween(begin: 100.0, end: 200.0).animate(_controller);
+    return AnimatedBuilder(
+      animation: _controller,
+      child: const Text("Custom Animation",textAlign: TextAlign.center,), // 这个 child 及传给 builder 的，从性能考虑
+      builder: (BuildContext context, Widget? child) {
+        return Opacity(
+          opacity: opacityAnimation.value,
+          child: Container(
+            alignment: Alignment.center,
+            color: Colors.blue,
+            width: 100,
+            height: heightAnimation.value,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
 }
 
 /// 交错动画
