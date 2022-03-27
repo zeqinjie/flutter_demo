@@ -13,8 +13,14 @@ class TWAnimationDisplayView extends StatefulWidget {
 
 /// Ticker 是每次刷新时候。 60hz 每秒触发 60 次
 class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin { // SingleTickerProviderStateMixin
   late AnimationController _controller;
+
+
+  /// 478呼吸的扩展动画
+  late AnimationController _expansionController;
+  /// 478呼吸的透明动画
+  late AnimationController _opacityController;
 
   bool _isLoading = false;
 
@@ -32,11 +38,14 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
     _controller.addListener(() {
       print("${_controller.value}");
     });
+    _expansionController = AnimationController(vsync: this);
+    _opacityController = AnimationController(vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.center,
       children: [
         const Align(
           alignment: Alignment.bottomCenter,
@@ -59,7 +68,8 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
         //   ],
         // ),
         // Align(child: _buildSlidingBoxAnimation()),
-        Align(child: _buildCustomAnimation()),
+        // Align(child: _buildCustomAnimation()),
+        _buildBreatedAnimation(),
         Positioned(
           right: 0,
           bottom: 0,
@@ -71,10 +81,14 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
                   if (_isLoading) {
                     _controller.stop(); // reset: 重置恢复   stop: 暂停
                   } else {
-                    _controller.repeat(reverse: true); // forward: 执行一次  repeat: 重复执行
+                    _controller.repeat(
+                        reverse: true); // forward: 执行一次  repeat: 重复执行
                   }
                   _isLoading = !_isLoading;
                 });
+
+                // 处理 478呼吸动画
+                handleBreatedAnimation();
               },
             ),
           ),
@@ -155,29 +169,52 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
     );
   }
 
-
   /// 交错动画展示
   Widget _buildSlidingBoxAnimation() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.1), interval: const Interval(0.0, 0.2)),
-        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.3), interval: const Interval(0.2, 0.4)),
-        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.5), interval: const Interval(0.4, 0.6)),
-        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.7), interval: const Interval(0.6, 0.8)),
-        TWSlidingBox(controller: _controller, color: Colors.blue.withOpacity(0.9), interval: const Interval(0.8, 1.0)),
-        TWSlidingBox(controller: _controller, color: Colors.blue, interval: const Interval(0.8, 1.0)),
+        TWSlidingBox(
+            controller: _controller,
+            color: Colors.blue.withOpacity(0.1),
+            interval: const Interval(0.0, 0.2)),
+        TWSlidingBox(
+            controller: _controller,
+            color: Colors.blue.withOpacity(0.3),
+            interval: const Interval(0.2, 0.4)),
+        TWSlidingBox(
+            controller: _controller,
+            color: Colors.blue.withOpacity(0.5),
+            interval: const Interval(0.4, 0.6)),
+        TWSlidingBox(
+            controller: _controller,
+            color: Colors.blue.withOpacity(0.7),
+            interval: const Interval(0.6, 0.8)),
+        TWSlidingBox(
+            controller: _controller,
+            color: Colors.blue.withOpacity(0.9),
+            interval: const Interval(0.8, 1.0)),
+        TWSlidingBox(
+            controller: _controller,
+            color: Colors.blue,
+            interval: const Interval(0.8, 1.0)),
       ],
     );
   }
 
   /// 自定义动画
   Widget _buildCustomAnimation() {
-    final Animation opacityAnimation = Tween(begin: 0.5, end: 0.8).animate(_controller);
-    final Animation heightAnimation = Tween(begin: 100.0, end: 200.0).animate(_controller);
+    final Animation opacityAnimation =
+        Tween(begin: 0.5, end: 0.8).animate(_controller);
+    final Animation heightAnimation =
+        Tween(begin: 100.0, end: 200.0).animate(_controller);
     return AnimatedBuilder(
       animation: _controller,
-      child: const Text("Custom Animation",textAlign: TextAlign.center,), // 这个 child 及传给 builder 的，从性能考虑
+      child: const Text(
+        "Custom Animation",
+        textAlign: TextAlign.center,
+      ),
+      // 这个 child 及传给 builder 的，从性能考虑
       builder: (BuildContext context, Widget? child) {
         return Opacity(
           opacity: opacityAnimation.value,
@@ -193,6 +230,58 @@ class _TWAnimationDisplayViewState extends State<TWAnimationDisplayView>
     );
   }
 
+  /// 478 呼吸动画
+  void handleBreatedAnimation() async {
+    _expansionController.duration = const Duration(seconds: 4);
+    _expansionController.forward();
+    await Future.delayed(const Duration(seconds: 4));
+
+    _opacityController.duration = const Duration(milliseconds: 1750);
+    _opacityController.repeat(reverse: true);
+    await Future.delayed(const Duration(seconds: 7));
+    _opacityController.reset();
+
+    _expansionController.duration = const Duration(seconds: 8);
+    _expansionController.reverse();
+  }
+
+  /// 478 呼吸
+  Widget _buildBreatedAnimation() {
+    // _controller.duration = const Duration(seconds: 20);
+    // Animation animation1 = Tween(begin: 0.0, end: 1.0)
+    //     .chain(CurveTween(curve: const Interval(0.1, 0.2)))
+    //     .animate(_controller);
+    // Animation animation2 = Tween(begin: 1.0, end: 0.0)
+    //     .chain(CurveTween(curve: const Interval(0.4, 0.95)))
+    //     .animate(_controller);
+    return FadeTransition(
+      opacity: Tween(begin: 0.5, end: 1.0).animate(_opacityController),
+      child: AnimatedBuilder(
+        // animation: _controller,
+        animation: _expansionController,
+        builder: (BuildContext context, Widget? child) {
+          return Container(
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.blue,
+              gradient: RadialGradient(
+                colors: [
+                  Colors.blue[600]!,
+                  Colors.blue[100]!,
+                ],
+                stops: [
+                  _expansionController.value,
+                  _expansionController.value + 0.1,
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
 /// 交错动画
@@ -225,7 +314,7 @@ class TWSlidingBox extends StatelessWidget {
             CurveTween(curve: interval),
           )
           .chain(
-            CurveTween(curve: Curves.bounceInOut),   // g(f(x))
+            CurveTween(curve: Curves.bounceInOut), // g(f(x))
           )
           .animate(controller),
     );

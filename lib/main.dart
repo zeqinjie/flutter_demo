@@ -7,7 +7,7 @@ import 'package:tw_chart_demo/key_demo/tw_flutter_key.dart';
 import 'package:tw_chart_demo/sliver_demo/tw_sliver_app.dart';
 
 void main() {
-  runApp(const TWSliverApp());
+  runApp(const TWAnimationApp());
 }
 
 
