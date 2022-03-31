@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tw_chart_demo/animation_demo/tw_animation_display_view.dart';
 import 'package:tw_chart_demo/animation_demo/tw_animation_implicit_view.dart';
+import 'package:tw_chart_demo/animation_demo/tw_animation_view.dart';
 
 /// create by:  zhengzeqin
 /// create time:  2022-03-15 22:37
@@ -22,7 +23,7 @@ class _TWAnimationAppState extends State<TWAnimationApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(),
-        body: const TWAnimationDisplayView(),
+        body: const TWAnimationView(),
       ),
     );
   }
