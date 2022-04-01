@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 /// create by:  zhengzeqin
 /// create time:  2022-03-31 22:02
@@ -16,9 +17,11 @@ class _TWAnimationViewState extends State<TWAnimationView>
   late AnimationController _controller;
   double _height = 50.0;
   bool _isLoading = false;
+
   @override
   void initState() {
     // TODO: implement initState
+    timeDilation = 5;
     super.initState();
     _controller = AnimationController(
       vsync: this,
@@ -43,7 +46,8 @@ class _TWAnimationViewState extends State<TWAnimationView>
           ),
         ),
         // _buildAnimatedContainer(),
-        _buildAnimatedBuilder(),
+        // _buildAnimatedBuilder(),
+        _buildHeroAnimated(),
         Positioned(
           right: 0,
           bottom: 0,
@@ -91,7 +95,7 @@ class _TWAnimationViewState extends State<TWAnimationView>
   /// _AnimatedState 使用的是 void _handleChange() { setState(() { });}
   Widget _buildAnimatedBuilder() {
     final Animation heightAnimation =
-    Tween(begin: 100.0, end: 200.0).animate(_controller);
+        Tween(begin: 100.0, end: 200.0).animate(_controller);
     return AnimatedBuilder(
       animation: _controller,
       child: const Text(
@@ -113,4 +117,82 @@ class _TWAnimationViewState extends State<TWAnimationView>
     );
   }
 
+  /// hero 动画
+  Widget _buildHeroAnimated() {
+    const path = "assets/beauty.jpeg";
+    return Center(
+      child: GridView.count(
+        crossAxisCount: 5,
+        mainAxisSpacing: 5,
+        crossAxisSpacing: 5,
+        children: List.generate(100, (index) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) {
+                  return TWAnimationHero(
+                    tag: index.toString(),
+                    assetImageName: path,
+                  );
+                }),
+              );
+            },
+            child: Hero(
+              tag: index.toString(),
+              child: Image.asset(path),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class TWAnimationHero extends StatelessWidget {
+  final String tag;
+  final String assetImageName;
+
+  const TWAnimationHero({
+    Key? key,
+    required this.tag,
+    required this.assetImageName,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Hero 基础动画详情'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Hero(
+              tag: tag,
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: Image.asset(
+                  assetImageName,
+                  height: 100,
+                  width: 100,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Material(
+                child: Text(
+                  "介绍了几篇 Hero 动画，我们来一个 Hero 动画应用案例。在一些应用中，列表的元素和详情的内容是一致的，这个时候利用 Hero 动画切换到详情会感觉无缝过渡，用户体验会更好",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
