@@ -131,7 +131,7 @@ class _TWAnimationViewState extends State<TWAnimationView>
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) {
-                  return TWAnimationHero(
+                  return TWHeroAnimation(
                     tag: index.toString(),
                     assetImageName: path,
                   );
@@ -149,11 +149,12 @@ class _TWAnimationViewState extends State<TWAnimationView>
   }
 }
 
-class TWAnimationHero extends StatelessWidget {
+/// hero 动画
+class TWHeroAnimation extends StatelessWidget {
   final String tag;
   final String assetImageName;
 
-  const TWAnimationHero({
+  const TWHeroAnimation({
     Key? key,
     required this.tag,
     required this.assetImageName,
@@ -196,3 +197,5 @@ class TWAnimationHero extends StatelessWidget {
     );
   }
 }
+
+
