@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:rive/rive.dart';
 
 /// create by:  zhengzeqin
 /// create time:  2022-03-31 22:02
@@ -15,8 +16,10 @@ class TWAnimationView extends StatefulWidget {
 class _TWAnimationViewState extends State<TWAnimationView>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late RiveAnimationController _riveAnimationController;
   double _height = 50.0;
   bool _isLoading = false;
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -41,6 +44,11 @@ class _TWAnimationViewState extends State<TWAnimationView>
     // );
     //
     // ticker.start();
+
+    _riveAnimationController = SimpleAnimation(
+      'riv',
+      autoplay: false,
+    );
   }
 
   @override
@@ -61,7 +69,8 @@ class _TWAnimationViewState extends State<TWAnimationView>
         ),
         // _buildAnimatedContainer(),
         // _buildAnimatedBuilder(),
-        _buildHeroAnimated(),
+        // _buildHeroAnimated(),
+        _buildFlareView(),
         Positioned(
           right: 0,
           bottom: 0,
@@ -79,9 +88,12 @@ class _TWAnimationViewState extends State<TWAnimationView>
                       _controller.stop(); // reset: 重置恢复   stop: 暂停
                     } else {
                       _controller.repeat(
-                          reverse: true); // forward: 执行一次  repeat: 重复执行
+                        reverse: true,
+                      ); // forward: 执行一次  repeat: 重复执行
                     }
-                    _isLoading = !_isLoading;
+                    _riveAnimationController.isActive =
+                        !_riveAnimationController.isActive;
+                    print("=====> ${_riveAnimationController.isActive}");
                   },
                 );
               },
@@ -159,6 +171,33 @@ class _TWAnimationViewState extends State<TWAnimationView>
           );
         }),
       ),
+    );
+  }
+
+  Widget _buildFlareView() {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 300,
+          child: RiveAnimation.asset(
+            "assets/knight.riv",
+            fit: BoxFit.fitHeight,
+            controllers: [_riveAnimationController],
+            animations: ['idle', 'curves'],
+          ),
+        ),
+        SizedBox(
+          width: double.infinity,
+          height: 300,
+          child: RiveAnimation.network(
+            'https://cdn.rive.app/animations/vehicles.riv',
+            fit: BoxFit.fitHeight,
+            controllers: [_riveAnimationController],
+            animations: ['idle', 'curves'],
+          ),
+        ),
+      ],
     );
   }
 }
