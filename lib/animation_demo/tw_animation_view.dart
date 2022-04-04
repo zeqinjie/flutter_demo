@@ -27,6 +27,20 @@ class _TWAnimationViewState extends State<TWAnimationView>
       vsync: this,
       duration: const Duration(seconds: 1),
     );
+
+    // // ticker 使用
+    // Ticker ticker = Ticker(
+    //   (_) => setState(
+    //     () {
+    //       _height += 1;
+    //       if (_height > 500) {
+    //         _height = 100;
+    //       }
+    //     },
+    //   ),
+    // );
+    //
+    // ticker.start();
   }
 
   @override
@@ -197,5 +211,3 @@ class TWHeroAnimation extends StatelessWidget {
     );
   }
 }
-
-

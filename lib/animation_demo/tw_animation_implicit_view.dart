@@ -36,11 +36,11 @@ class _TWAnimationImplicitViewState extends State<TWAnimationImplicitView> {
             ),
           ),
         ),
-        // _buildAnimatedContainer(),
+        _buildAnimatedContainer(),
         // _buildCurvesAnimated(),
         // _buildTweenAnimated(),
         // _buildAnimatedCounter(),
-        _buildTWAnimatedCounter(),
+        // _buildTWAnimatedCounter(),
         Positioned(
           right: 0,
           bottom: 0,

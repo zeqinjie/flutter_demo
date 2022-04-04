@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 //paint区域大小
@@ -18,11 +17,24 @@ class TWAnimationCustomPainterView extends StatefulWidget {
 class _TWAnimationCustomPainterViewState
     extends State<TWAnimationCustomPainterView>
     with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+  late AnimationController _controller;
   late List _list; //存放随机数
+  List<TWShowFlake>? _snowFlakes;
   @override
   void initState() {
     super.initState();
+    _initShowFlake();
+    // _initShape();
+  }
+
+  void _initShowFlake() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    )..repeat();
+  }
+
+  void _initShape() {
     var rng = Random();
     _list = [
       rng.nextDouble(),
@@ -31,14 +43,14 @@ class _TWAnimationCustomPainterViewState
       rng.nextDouble(),
       rng.nextDouble(),
     ];
-    controller = AnimationController(
+    _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    controller.addStatusListener((status) {
+    _controller.addStatusListener((status) {
       //动画结束后反转
       if (status == AnimationStatus.completed) {
-        controller.reverse();
+        _controller.reverse();
       }
       //反转后重置随机值，继续播放
       if (status == AnimationStatus.dismissed) {
@@ -50,37 +62,135 @@ class _TWAnimationCustomPainterViewState
           rng.nextDouble(),
           rng.nextDouble(),
         ];
-        print(_list);
         setState(() {});
-        controller.forward();
+        _controller.forward();
       }
     });
-    controller.forward();
+    _controller.forward();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    _snowFlakes ??= List.generate(100, (index) => TWShowFlake(context));
+    return _buildContent(context);
+  }
+
+  Widget _buildContent(BuildContext context) {
+    // return _buildMusicContent();
+    return _buildSnowmanContent(context);
+  }
+
+  Widget _buildSnowmanContent(BuildContext context) {
+    return Center(
+      child: Container(
+        color: Colors.black,
+        width: double.infinity,
+        height: double.infinity,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            final snowFlakes = _snowFlakes ?? [];
+            snowFlakes.forEach((element) {
+              element.fall();
+            });
+            return CustomPaint(
+              painter: TWSnowmanPainter(context: context, snowFlakes: snowFlakes),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMusicContent() {
     return Center(
       child: CustomPaint(
         size: Size(sizeWidth, sizeWidth),
-        painter: ShapePainter(controller, _list),
+        painter: TWMusicPainter(_controller, _list),
       ),
     );
   }
 }
 
-class ShapePainter extends CustomPainter {
+class TWSnowmanPainter extends CustomPainter {
+  List<TWShowFlake> snowFlakes;
+  BuildContext context;
+
+  TWSnowmanPainter({required this.context, required this.snowFlakes});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final p = Paint()..color = Colors.white;
+    // TODO: implement paint
+    canvas.drawCircle(
+      size.center(const Offset(0, 100)),
+      60,
+      p,
+    );
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(width / 2.0, height - 180),
+        width: 200,
+        height: 250,
+      ),
+      p,
+    );
+    snowFlakes.forEach((element) {
+      canvas.drawCircle(Offset(element.x, element.y), element.radius, p);
+    });
+    //
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    return true;
+  }
+}
+
+class TWShowFlake {
+  BuildContext context;
+  late double x;
+  late double y;
+  late double radius;
+  late double velocity;
+
+
+  TWShowFlake(this.context) {
+    _initData();
+  }
+
+  _initData() {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    x = Random().nextDouble() * width;
+    y = Random().nextDouble() * height;
+    radius = Random().nextDouble() * 2 + 2;
+    velocity = Random().nextDouble() * 4 + 2;
+  }
+
+  fall() {
+    y = y + velocity;
+    if (y > 800) {
+      _initData();
+    }
+  }
+}
+
+class TWMusicPainter extends CustomPainter {
   final Animation<double> spread;
   final List _list;
 
-  ShapePainter(this.spread, this._list) : super(repaint: spread);
+  TWMusicPainter(this.spread, this._list) : super(repaint: spread);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -116,7 +226,7 @@ class ShapePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant ShapePainter oldDelegate) {
+  bool shouldRepaint(covariant TWMusicPainter oldDelegate) {
     return oldDelegate.spread != spread;
   }
 }

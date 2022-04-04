@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tw_chart_demo/animation_demo/tw_animation_custom_painter_view.dart';
 import 'package:tw_chart_demo/animation_demo/tw_animation_display_view.dart';
 import 'package:tw_chart_demo/animation_demo/tw_animation_implicit_view.dart';
 import 'package:tw_chart_demo/animation_demo/tw_animation_view.dart';
