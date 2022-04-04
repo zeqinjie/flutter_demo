@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 
 /// create by:  zhengzeqin
@@ -19,36 +20,67 @@ class _TWAnimationViewState extends State<TWAnimationView>
   late RiveAnimationController _riveAnimationController;
   double _height = 50.0;
   bool _isLoading = false;
-  bool _isPlaying = false;
+  late SimpleAnimation _dayNightAnimation, _nightDayAnimation;
+  Artboard? _riveArtboard;
 
   @override
   void initState() {
     // TODO: implement initState
-    timeDilation = 5;
+    // timeDilation = 5;
+
     super.initState();
+    _initAnimationController();
+    // _initTicker();
+    _initRivAnimation();
+  }
+
+  void _initAnimationController() {
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
     );
+  }
 
-    // // ticker 使用
-    // Ticker ticker = Ticker(
-    //   (_) => setState(
-    //     () {
-    //       _height += 1;
-    //       if (_height > 500) {
-    //         _height = 100;
-    //       }
-    //     },
-    //   ),
-    // );
-    //
-    // ticker.start();
-
-    _riveAnimationController = SimpleAnimation(
-      'riv',
-      autoplay: false,
+  void _initTicker() {
+    // ticker 使用
+    Ticker ticker = Ticker(
+          (_) => setState(
+            () {
+          _height += 1;
+          if (_height > 500) {
+            _height = 100;
+          }
+        },
+      ),
     );
+
+    ticker.start();
+  }
+
+  void _initRivAnimation() {
+    _riveAnimationController = SimpleAnimation('idle');
+    rootBundle.load('assets/knight.riv').then(
+          (data) async {
+        final file = RiveFile.import(data);
+        final artboard = file.mainArtboard;
+        _dayNightAnimation = SimpleAnimation('day_night');
+        _nightDayAnimation = SimpleAnimation('night_day');
+        artboard.addController(SimpleAnimation('idle'));
+        setState(() => _riveArtboard = artboard);
+      },
+    );
+  }
+
+  /// 切换到白天
+  void _playDayNightAnimation() {
+    _riveArtboard?.removeController(_nightDayAnimation);
+    _riveArtboard?.addController(_dayNightAnimation);
+  }
+
+  /// 切换到黑夜
+  void _playNightDayAnimation() {
+    _riveArtboard?.removeController(_dayNightAnimation);
+    _riveArtboard?.addController(_nightDayAnimation);
   }
 
   @override
@@ -93,7 +125,11 @@ class _TWAnimationViewState extends State<TWAnimationView>
                     }
                     _riveAnimationController.isActive =
                         !_riveAnimationController.isActive;
-                    print("=====> ${_riveAnimationController.isActive}");
+                    if (_riveAnimationController.isActive) {
+                      _playNightDayAnimation();
+                    } else {
+                      _playDayNightAnimation();
+                    }
                   },
                 );
               },
@@ -177,24 +213,23 @@ class _TWAnimationViewState extends State<TWAnimationView>
   Widget _buildFlareView() {
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: 300,
-          child: RiveAnimation.asset(
-            "assets/knight.riv",
-            fit: BoxFit.fitHeight,
-            controllers: [_riveAnimationController],
-            animations: ['idle', 'curves'],
-          ),
-        ),
+        _riveArtboard == null
+            ? const SizedBox()
+            : SizedBox(
+                width: double.infinity,
+                height: 300,
+                child: Rive(
+                  artboard: _riveArtboard!,
+                ),
+              ),
         SizedBox(
           width: double.infinity,
           height: 300,
           child: RiveAnimation.network(
             'https://cdn.rive.app/animations/vehicles.riv',
-            fit: BoxFit.fitHeight,
             controllers: [_riveAnimationController],
-            animations: ['idle', 'curves'],
+            // Update the play state when the widget's initialized
+            onInit: (_) => setState(() {}),
           ),
         ),
       ],
