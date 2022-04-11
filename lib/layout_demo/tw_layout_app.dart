@@ -23,7 +23,7 @@ class TWLayoutApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text("布局探索"),
         ),
-        body: _buildStack(),
+        body: _buildContainer4(),
       ),
     );
   }
@@ -180,6 +180,59 @@ class TWLayoutApp extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  /// 加了 Align 的组件，那他就占满父组件的大小，否则就是 child 组件的大小
+  Widget _buildContainer1() {
+    return Container(
+      color: Colors.orange,
+      alignment: Alignment.center,
+      child: const FlutterLogo(
+        size: 100,
+      ),
+    );
+  }
+
+  /// 没 child 越大越好，除非无边界
+  /// 当 Column 无边界（unbounded）包裹，那么就高度为 0
+  Widget _buildContainer2() {
+    return Column(
+      children: [
+        Container(
+          color: Colors.orange,
+        ),
+      ],
+    );
+  }
+
+  /// 当无边界，且有 child 时则匹配 child 高度
+  Widget _buildContainer3() {
+    return Column(
+      children: [
+        Container(
+          color: Colors.orange,
+          alignment: Alignment.center,
+          child: const FlutterLogo(size: 100,),
+        ),
+      ],
+    );
+  }
+
+  /// LimitedBox 在无边界组件（Row、Column）才生效
+  /// 当在 Column（高度无边界），那么最大是 LimitedBox 的限制高度
+  Widget _buildContainer4() {
+    return Column(
+      children: [
+        LimitedBox(
+          maxHeight: 10,
+          child: Container(
+            color: Colors.orange,
+            alignment: Alignment.center,
+            child: const FlutterLogo(size: 200,),
+          ),
+        ),
+      ],
     );
   }
 }
