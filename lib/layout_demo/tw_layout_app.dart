@@ -23,7 +23,7 @@ class TWLayoutApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text("布局探索"),
         ),
-        body: _buildContainer4(),
+        body: _buildCustomMultiChildLayout2(),
       ),
     );
   }
@@ -213,7 +213,9 @@ class TWLayoutApp extends StatelessWidget {
         Container(
           color: Colors.orange,
           alignment: Alignment.center,
-          child: const FlutterLogo(size: 100,),
+          child: const FlutterLogo(
+            size: 100,
+          ),
         ),
       ],
     );
@@ -229,10 +231,120 @@ class TWLayoutApp extends StatelessWidget {
           child: Container(
             color: Colors.orange,
             alignment: Alignment.center,
-            child: const FlutterLogo(size: 200,),
+            child: const FlutterLogo(
+              size: 200,
+            ),
           ),
         ),
       ],
     );
   }
+
+  /// 自定义 Layout
+  Widget _buildCustomMultiChildLayout1() {
+    return CustomMultiChildLayout(
+      delegate: ZQLogoDelegate(),
+      children: [
+        LayoutId(
+          id: 1,
+          child: const FlutterLogo(
+            size: 50,
+          ),
+        ),
+        LayoutId(
+          id: 2,
+          child: const FlutterLogo(
+            size: 200,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 自定义 下划线文本 Layout
+  Widget _buildCustomMultiChildLayout2() {
+    return CustomMultiChildLayout(
+      delegate: ZQUnderLineTextDelegate(),
+      children: [
+        LayoutId(
+          id: 'underline',
+          child: Container(
+            color: Colors.red,
+          ),
+        ),
+        LayoutId(
+          id: 'text',
+          child: const Text(
+            'hello world',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ZQLogoDelegate extends MultiChildLayoutDelegate {
+  @override
+  void performLayout(Size size) {
+    Size size1 = Size.zero;
+    if (hasChild(1)) {
+      // 向下传递约束，向上传递尺寸
+      size1 = layoutChild(
+        1,
+        BoxConstraints.loose(
+          const Size(500, 500),
+        ),
+      );
+      // 设置位置
+      positionChild(1, Offset.zero);
+    }
+
+    if (hasChild(2)) {
+      layoutChild(
+        2,
+        BoxConstraints.loose(
+          const Size(500, 500),
+        ),
+      );
+      positionChild(2, Offset(size1.width, size1.height));
+    }
+  }
+
+  /// 类似 动画 & 绘图代理，是否需要重绘
+  @override
+  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) => true;
+}
+
+/// 实现自定义布局代理
+class ZQUnderLineTextDelegate extends MultiChildLayoutDelegate {
+  final double thickness;
+
+  ZQUnderLineTextDelegate({this.thickness = 2.0});
+
+  @override
+  void performLayout(Size size) {
+    if (hasChild('text') && hasChild('underline')) {
+      // 向下传递约束，向上传递尺寸
+      Size textSize = layoutChild(
+        'text', // 组件的 ID 唯一
+        BoxConstraints.loose(size),
+      );
+      layoutChild(
+        'underline',
+        BoxConstraints.tight(Size(textSize.width, thickness)),
+      );
+      final left = (size.width - textSize.width) / 2;
+      final top = (size.height - textSize.height) / 2;
+      // 设置位置
+      positionChild('text', Offset(left, top));
+      positionChild('underline', Offset(left, top + textSize.height));
+    }
+  }
+
+  @override
+  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) => true;
 }
