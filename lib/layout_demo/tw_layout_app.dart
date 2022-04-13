@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 /// create by:  zhengzeqin
 /// create time:  2022-04-07 22:06
@@ -23,7 +24,7 @@ class TWLayoutApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text("布局探索"),
         ),
-        body: _buildCustomMultiChildLayout2(),
+        body: _buildRenderBox(),
       ),
     );
   }
@@ -108,21 +109,21 @@ class TWLayoutApp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ElevatedButton(onPressed: null, child: Text("xxx")),
-            ElevatedButton(onPressed: null, child: Text("xxx")),
+            const ElevatedButton(onPressed: null, child: Text("xxx")),
+            const ElevatedButton(onPressed: null, child: Text("xxx")),
             LayoutBuilder(
               builder: (context, constraints) {
                 print(constraints);
-                return FlutterLogo(
+                return const FlutterLogo(
                   size: 100,
                 );
               },
             ),
             ListView(),
-            FlutterLogo(
+            const FlutterLogo(
               size: 200,
             ),
-            FlutterLogo(
+            const FlutterLogo(
               size: 50,
             ),
           ],
@@ -135,7 +136,7 @@ class TWLayoutApp extends StatelessWidget {
   Widget _buildStack() {
     return Container(
       color: Colors.blue,
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: 20,
         maxWidth: 300,
         minHeight: 20,
@@ -160,7 +161,7 @@ class TWLayoutApp extends StatelessWidget {
             left: 0,
             child: Container(
               color: Colors.green,
-              child: Text(
+              child: const Text(
                 "0",
                 style: TextStyle(
                   fontSize: 20,
@@ -172,8 +173,8 @@ class TWLayoutApp extends StatelessWidget {
             top: 0,
             right: 0,
             child: Transform.translate(
-              offset: Offset(50, 0),
-              child: FlutterLogo(
+              offset: const Offset(50, 0),
+              child: const FlutterLogo(
                 size: 100,
               ),
             ),
@@ -285,6 +286,20 @@ class TWLayoutApp extends StatelessWidget {
       ],
     );
   }
+
+  /// 自定义 RenderObject
+  Widget _buildRenderBox() {
+    return Container(
+      color: Colors.blue,
+      child:  ZQRenderBox(
+        const FlutterLogo(
+          size: 1000,
+        ),
+        distance: 10,
+        parentSize: const Size(300, 300),
+      ),
+    );
+  }
 }
 
 class ZQLogoDelegate extends MultiChildLayoutDelegate {
@@ -347,4 +362,80 @@ class ZQUnderLineTextDelegate extends MultiChildLayoutDelegate {
 
   @override
   bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) => true;
+}
+
+/// 自定义 ZQRenderBox 继承 SingleChildRenderObjectWidget
+/// 多子布局 SingleChildRenderObjectWidget & MultiChildRenderObjectWidget 都是继承 RenderObjectWidget
+class ZQRenderBox extends SingleChildRenderObjectWidget {
+  /// 确定父组件大小
+  Size? parentSize;
+  double? distance;
+  ZQRenderBox(Widget child, {Key? key, this.parentSize, this.distance = 0}) : super(key: key, child: child);
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    // TODO: implement createRenderObject
+    // 返回一个 RenderObject 对象
+    return RenderZQRenderBox(parentSize: parentSize, distance: distance);
+  }
+
+  /// 实现热更新 RenderObject 参数
+  @override
+  void updateRenderObject(BuildContext context, covariant RenderZQRenderBox renderObject) {
+    // TODO: implement updateRenderObject
+    // super.updateRenderObject(context, renderObject);
+    renderObject.distance = distance;
+    renderObject.parentSize = parentSize;
+  }
+}
+
+/// 自定义 RenderZQRenderBox 继承 RenderBox
+/// RenderBox 继承 RenderObject
+class RenderZQRenderBox extends RenderBox with RenderObjectWithChildMixin, DebugOverflowIndicatorMixin {  // RenderProxyBox
+  Size? parentSize;
+  /// 偏移量
+  double? distance;
+  RenderZQRenderBox({this.parentSize, this.distance = 0});
+
+  @override
+  void performLayout() {
+    // TODO: implement performLayout
+    // super.performLayout(); 注意这个就不调用了
+    print('constraints: $constraints');
+    // 父 widget 固定了大小
+    if (parentSize != null) {
+      // 对子组件布局松约束 Size(300, 300)
+      // 📢 子组件的布局约束不能大于当前 constraints 值
+      child?.layout(BoxConstraints.loose(parentSize!));
+      size = parentSize!;//parentSize!;
+    } else {
+      // 默认是 flutter: constraints: BoxConstraints(0.0<=w<=375.0, 0.0<=h<=706.0)
+      child?.layout(constraints, parentUsesSize: true);
+      // 如果想父 widget 和当前 widget 尺寸大小一样需 parentUsesSize = true，
+      // 如果 parentUsesSize = false 对性能有帮助，保证了父 widget 大小不会因当前 child 变化而变化
+      print('RenderBox Size: ${(child as RenderBox).size}');
+      size = (child as RenderBox).size;
+    }
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    // TODO: implement paint
+    super.paint(context, offset);
+    if (child != null) {
+      // 绘制
+      context.paintChild(child!, offset);
+
+      if (distance != null) {
+        context.pushOpacity(offset, 100, (context, offset) {
+          context.paintChild(child!, offset + Offset(distance!, distance!));
+        });
+      }
+      // offset & size = offset(offset.x)
+      // print("offset & size: ${offset & size}");
+      // print("offset & size: ${offset.dx + size.width}");
+      // print("offset & size: ${offset.dy + size.height}");
+      paintOverflowIndicator(context, offset, offset & size, offset & (child as RenderBox).size);
+    }
+  }
 }
