@@ -365,7 +365,7 @@ class ZQUnderLineTextDelegate extends MultiChildLayoutDelegate {
 }
 
 /// 自定义 ZQRenderBox 继承 SingleChildRenderObjectWidget
-/// 多子布局 SingleChildRenderObjectWidget & MultiChildRenderObjectWidget 都是继承 RenderObjectWidget
+/// 单子布局 SingleChildRenderObjectWidget & 多子布局 MultiChildRenderObjectWidget 都是继承 RenderObjectWidget
 class ZQRenderBox extends SingleChildRenderObjectWidget {
   /// 确定父组件大小
   Size? parentSize;
