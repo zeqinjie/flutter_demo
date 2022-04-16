@@ -4,7 +4,7 @@
 - [一）Flutter Key的原理和使用](https://zhengzeqin.netlify.app/2022/03/15/%E4%B8%80%EF%BC%89flutter-key%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E4%BD%BF%E7%94%A8/)
 - [二）Flutter-动画详解（一）](https://zhengzeqin.netlify.app/2022/03/28/%E4%BA%8C%EF%BC%89flutter-%E5%8A%A8%E7%94%BB%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%B8%80%EF%BC%89/)
 - [三）Flutter-动画详解（二）](https://zhengzeqin.netlify.app/2022/04/05/%E4%B8%89%EF%BC%89flutter-%E5%8A%A8%E7%94%BB%E8%AF%A6%E8%A7%A3%EF%BC%88%E4%BA%8C%EF%BC%89/)
-
+- [四）Flutter 布局详解(一) ](https://zhengzeqin.netlify.app/2022/04/16/%E5%9B%9B%EF%BC%89flutter-%E5%B8%83%E5%B1%80%E8%AF%A6%E8%A7%A3/)
 ### Flutter 实战
 #### 走势图
 走势图效果 fork 至 [传送门](https://github.com/good-good-study/flutter_chart) 感谢~
