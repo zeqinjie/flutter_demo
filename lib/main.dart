@@ -8,7 +8,7 @@ import 'package:tw_chart_demo/layout_demo/tw_layout_app.dart';
 import 'package:tw_chart_demo/sliver_demo/tw_sliver_app.dart';
 
 void main() {
-  runApp(const TWLayoutApp());
+  runApp(const TWSliverApp());
 }
 
 
