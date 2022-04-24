@@ -3,7 +3,7 @@ import 'dart:math';
 
 /// create by:  zhengzeqin
 /// create time:  2022-04-23 13:18
-/// des: 滚动
+/// des: 滚动组件
 
 class TWScrollApp extends StatefulWidget {
   const TWScrollApp({Key? key}) : super(key: key);

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 /// create by: zhengzeqin
 /// create time: 2022/4/19 10:57 上午
-/// des: https://h5.48.cn/resource/jsonp/allmembers.php?gid=10
-///
+/// des
 
 class TWNestedScrollView extends StatefulWidget {
   const TWNestedScrollView({Key? key}) : super(key: key);
@@ -38,7 +37,7 @@ class _TWNestedScrollViewState extends State<TWNestedScrollView>
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           SliverAppBar(
-            title: Text("zhengzeqin"),
+            title: const Text("zhengzeqin"),
             expandedHeight: 230.0,
             pinned: true,
             flexibleSpace: Container(

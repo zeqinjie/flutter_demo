@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:tw_chart_demo/sliver_demo/tw_custom_scroll_view.dart';
 import 'package:tw_chart_demo/sliver_demo/tw_nested_scroll_view.dart';
 
 /// create by:  zhengzeqin
@@ -18,10 +19,11 @@ class _TWSliverAppState extends State<TWSliverApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.grey),
+      theme: ThemeData(primarySwatch: Colors.pink),
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: TWNestedScrollView(),  // TWCustomScrollView()
+      home: Scaffold(
+        appBar: AppBar(title: const Text('sliver demo')),
+        body: const TWCustomScrollView(),  // TWCustomScrollView()
       ),
     );
   }

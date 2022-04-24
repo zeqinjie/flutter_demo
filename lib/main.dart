@@ -9,7 +9,7 @@ import 'package:tw_chart_demo/scroll_demo/tw_scroll_app.dart';
 import 'package:tw_chart_demo/sliver_demo/tw_sliver_app.dart';
 
 void main() {
-  runApp(const TWScrollApp());
+  runApp(const TWSliverApp());
 }
 
 
