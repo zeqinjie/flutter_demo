@@ -19,7 +19,7 @@ class _TWAnimationViewState extends State<TWAnimationView>
   late AnimationController _controller;
   late RiveAnimationController _riveAnimationController;
   double _height = 50.0;
-  bool _isLoading = false;
+  final bool _isLoading = false;
   late SimpleAnimation _dayNightAnimation, _nightDayAnimation;
   Artboard? _riveArtboard;
 
@@ -44,8 +44,8 @@ class _TWAnimationViewState extends State<TWAnimationView>
   void _initTicker() {
     // ticker 使用
     Ticker ticker = Ticker(
-          (_) => setState(
-            () {
+      (_) => setState(
+        () {
           _height += 1;
           if (_height > 500) {
             _height = 100;
@@ -60,7 +60,7 @@ class _TWAnimationViewState extends State<TWAnimationView>
   void _initRivAnimation() {
     _riveAnimationController = SimpleAnimation('idle');
     rootBundle.load('assets/knight.riv').then(
-          (data) async {
+      (data) async {
         final file = RiveFile.import(data);
         final artboard = file.mainArtboard;
         _dayNightAnimation = SimpleAnimation('day_night');
