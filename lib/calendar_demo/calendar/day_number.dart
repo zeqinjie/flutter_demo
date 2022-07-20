@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 16:34:44
+ * @LastEditTime: 2022-07-20 17:56:25
  * @Description: your project
  */
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class DayNumber extends StatefulWidget {
     required this.day,
     required this.isDefaultSelected,
     this.isToday = false,
-    this.todayColor = Colors.blue,
+    this.todayColor = Colors.grey,
   }) : super(key: key);
 
   final int day;
@@ -38,7 +38,7 @@ class _DayNumberState extends State<DayNumber> {
       margin: EdgeInsets.all(itemMargin),
       alignment: Alignment.center,
       decoration: (isSelected && widget.day > 0)
-          ? const BoxDecoration(color: Colors.blue)
+          ? const BoxDecoration(color: Colors.orange)
           : widget.isToday
               ? BoxDecoration(color: widget.todayColor)
               : null,

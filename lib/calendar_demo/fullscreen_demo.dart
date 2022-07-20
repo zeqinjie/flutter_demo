@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 16:47:02
+ * @LastEditTime: 2022-07-20 17:55:40
  * @Description: your project
  */
 import 'package:flutter/material.dart';
@@ -20,10 +20,10 @@ class _TWCalendarFullScreenState extends State<TWCalendarFullScreen> {
   @override
   Widget build(BuildContext context) {
     return CalendarList(
-      firstDate: DateTime(2022, 8, 1),
-      lastDate: DateTime(2022, 9, 2),
-//      selectedStartDate: DateTime(2019, 8, 28),
-//      selectedEndDate: DateTime(2019, 9, 2),
+      firstDate: DateTime(2022, 7, 3),
+      lastDate: DateTime(2022, 9, 21),
+      selectedStartDate: DateTime(2022, 8, 28),
+      selectedEndDate: DateTime(2022, 9, 2),
       onSelectFinish: (selectStartTime, selectEndTime) {
         List<DateTime> result = <DateTime>[];
         result.add(selectStartTime);

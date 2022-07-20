@@ -42,7 +42,10 @@ class _MonthViewState extends State<MonthView> {
     List<Row> dayRows = <Row>[];
     List<DayNumber> dayRowChildren = <DayNumber>[];
 
-    int daysInMonth = getDaysInMonth(widget.year, widget.month);
+    int daysInMonth = getDaysInMonth(
+      widget.year,
+      widget.month,
+    );
 
     // 日 一 二 三 四 五 六
     int firstWeekdayOfMonth = DateTime(widget.year, widget.month, 2).weekday;

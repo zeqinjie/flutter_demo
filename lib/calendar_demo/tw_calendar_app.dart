@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:27:01
- * @LastEditTime: 2022-07-20 16:53:22
+ * @LastEditTime: 2022-07-20 18:00:16
  * @Description: 日历组件
  */
 import 'package:flutter/material.dart';
@@ -52,6 +52,12 @@ class _HomePageState extends State<_HomePage> {
   // Dialog方式
   _showNavigateDailog(BuildContext context) {
     showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
       context: context,
       builder: (BuildContext context) {
         return const SizedBox(
