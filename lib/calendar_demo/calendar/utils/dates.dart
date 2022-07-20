@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 16:39:34
+ * @LastEditTime: 2022-07-20 22:42:11
  * @Description: your project
  */
 bool dateIsToday(DateTime date) {
@@ -21,18 +21,24 @@ String getMonthName(
 }) {
   final List<String> names = monthNames ??
       <String>[
-        '一月',
-        '二月',
-        '三月',
-        '四月',
-        '五月',
-        '六月',
-        '七月',
-        '八月',
-        '九月',
-        '十月',
-        '十一月',
-        '十二月',
+        '01月',
+        '02月',
+        '03月',
+        '04月',
+        '05月',
+        '06月',
+        '07月',
+        '08月',
+        '09月',
+        '10月',
+        '11月',
+        '12月',
       ];
   return names[month - 1];
+}
+
+String getYearName(
+  int year,
+) {
+  return '$year年';
 }

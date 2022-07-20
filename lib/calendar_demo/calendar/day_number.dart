@@ -1,8 +1,8 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 17:56:25
- * @Description: your project
+ * @LastEditTime: 2022-07-20 23:13:26
+ * @Description: 天数
  */
 import 'package:flutter/material.dart';
 import 'calendar_notification.dart';
@@ -14,7 +14,7 @@ class DayNumber extends StatefulWidget {
     required this.day,
     required this.isDefaultSelected,
     this.isToday = false,
-    this.todayColor = Colors.grey,
+    this.todayColor,
   }) : super(key: key);
 
   final int day;
@@ -38,9 +38,15 @@ class _DayNumberState extends State<DayNumber> {
       margin: EdgeInsets.all(itemMargin),
       alignment: Alignment.center,
       decoration: (isSelected && widget.day > 0)
-          ? const BoxDecoration(color: Colors.orange)
+          ? BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.circular(4),
+            )
           : widget.isToday
-              ? BoxDecoration(color: widget.todayColor)
+              ? BoxDecoration(
+                  color: widget.todayColor,
+                  borderRadius: BorderRadius.circular(4),
+                )
               : null,
       child: Text(
         widget.day < 1 ? '' : widget.day.toString(),

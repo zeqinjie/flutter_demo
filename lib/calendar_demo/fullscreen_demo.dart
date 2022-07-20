@@ -1,22 +1,22 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 17:55:40
+ * @LastEditTime: 2022-07-20 22:19:33
  * @Description: your project
  */
 import 'package:flutter/material.dart';
 import 'calendar/calendar_list.dart';
 
-class TWCalendarFullScreen extends StatefulWidget {
-  const TWCalendarFullScreen({
+class TWCalendarView extends StatefulWidget {
+  const TWCalendarView({
     Key? key,
   }) : super(key: key);
 
   @override
-  _TWCalendarFullScreenState createState() => _TWCalendarFullScreenState();
+  _TWCalendarViewState createState() => _TWCalendarViewState();
 }
 
-class _TWCalendarFullScreenState extends State<TWCalendarFullScreen> {
+class _TWCalendarViewState extends State<TWCalendarView> {
   @override
   Widget build(BuildContext context) {
     return CalendarList(

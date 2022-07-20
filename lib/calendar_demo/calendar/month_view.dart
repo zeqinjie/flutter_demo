@@ -116,10 +116,18 @@ class _MonthViewState extends State<MonthView> {
           margin: EdgeInsets.all(widget.padding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              MonthTitle(
-                month: widget.month,
-                monthNames: widget.monthNames,
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 5,
+                  bottom: 5,
+                ),
+                child: MonthTitle(
+                  year: widget.year,
+                  month: widget.month,
+                  monthNames: widget.monthNames,
+                ),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8.0),

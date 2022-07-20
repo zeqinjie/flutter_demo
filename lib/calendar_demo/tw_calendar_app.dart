@@ -45,7 +45,7 @@ class _HomePageState extends State<_HomePage> {
   _showNavigateFullScreen(BuildContext context) async {
     selectResult1 = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const TWCalendarFullScreen()),
+      MaterialPageRoute(builder: (context) => const TWCalendarView()),
     );
   }
 
@@ -62,7 +62,7 @@ class _HomePageState extends State<_HomePage> {
       builder: (BuildContext context) {
         return const SizedBox(
           height: 600.0,
-          child: TWCalendarFullScreen(),
+          child: TWCalendarView(),
         );
       },
     ).then((result) {

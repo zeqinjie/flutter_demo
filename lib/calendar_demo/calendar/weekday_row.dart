@@ -1,8 +1,8 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 16:42:41
- * @Description: your project
+ * @LastEditTime: 2022-07-20 23:00:48
+ * @Description: 日期视图
  */
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,8 @@ class WeekdayRow extends StatelessWidget {
           child: DefaultTextStyle(
             style: const TextStyle(
               color: Colors.black,
-              fontSize: 14.0,
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
             ),
             child: Text(
               weekDay,
@@ -25,13 +26,13 @@ class WeekdayRow extends StatelessWidget {
 
   List<Widget> _renderWeekDays() {
     List<Widget> list = [];
-    list.add(_weekdayContainer("周日"));
-    list.add(_weekdayContainer("周一"));
-    list.add(_weekdayContainer("周二"));
-    list.add(_weekdayContainer("周三"));
-    list.add(_weekdayContainer("周四"));
-    list.add(_weekdayContainer("周五"));
-    list.add(_weekdayContainer("周六"));
+    list.add(_weekdayContainer("日"));
+    list.add(_weekdayContainer("一"));
+    list.add(_weekdayContainer("二"));
+    list.add(_weekdayContainer("三"));
+    list.add(_weekdayContainer("四"));
+    list.add(_weekdayContainer("五"));
+    list.add(_weekdayContainer("六"));
     return list;
   }
 
