@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 14:26:50
+ * @LastEditTime: 2022-07-21 15:01:24
  * @Description: your project
  */
 
@@ -78,12 +78,16 @@ class TWCalendarTool {
     DateTime? selectEndTime,
   ) {
     if (selectStartTime != null && selectEndTime != null) {
-      return '${selectStartTime.month}.${selectStartTime.day}-${selectEndTime.month}.${selectEndTime.day}';
+      return '${formatPadLeft(selectStartTime.month)}.${formatPadLeft(selectStartTime.day)}-${formatPadLeft(selectEndTime.month)}.${formatPadLeft(selectEndTime.day)}';
     }
     if (selectStartTime != null && selectEndTime == null) {
-      return '${selectStartTime.month}.${selectStartTime.day}';
+      return '${formatPadLeft(selectStartTime.month)}.${formatPadLeft(selectStartTime.day)}';
     }
     return null;
+  }
+
+  static String formatPadLeft(int number, {int count = 2}) {
+    return number.toString().padLeft(count, '0');
   }
 
   /// 选择天数

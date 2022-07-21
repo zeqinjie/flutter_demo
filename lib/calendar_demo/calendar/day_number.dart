@@ -1,11 +1,12 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 13:41:46
+ * @LastEditTime: 2022-07-21 15:02:41
  * @Description: 天数
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tw_chart_demo/calendar_demo/calendar/utils/tw_calendart_tool.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
 import 'calendar_notification.dart';
 
@@ -70,7 +71,7 @@ class _DayNumberState extends State<DayNumber> {
       color = TWColors.twFFFFFF;
     }
     return Text(
-      widget.day < 1 ? '' : widget.day.toString(),
+      widget.day < 1 ? '' : TWCalendarTool.formatPadLeft(widget.day),
       textAlign: TextAlign.center,
       style: TextStyle(
         color: color,
