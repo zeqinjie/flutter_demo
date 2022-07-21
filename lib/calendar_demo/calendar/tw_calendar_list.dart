@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 22:10:08
- * @LastEditTime: 2022-07-21 14:17:36
+ * @LastEditTime: 2022-07-21 16:17:38
  * @Description: your project
  */
 library calendar_list;
@@ -10,15 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tw_chart_demo/calendar_demo/calendar/utils/tw_calendart_tool.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
-import 'month_view.dart';
-import 'weekday_row.dart';
+import 'tw_month_view.dart';
+import 'tw_weekday_row.dart';
 
-enum CalendarListShowMode {
-  dailog,
-  fullScreen,
-}
-
-class CalendarList extends StatefulWidget {
+class TWCalendarList extends StatefulWidget {
   /// 开始的年月份
   final DateTime firstDate;
 
@@ -37,10 +32,7 @@ class CalendarList extends StatefulWidget {
   /// 头部组件
   final Widget? headerView;
 
-  /// 展示模式
-  final CalendarListShowMode showMode;
-
-  CalendarList({
+  TWCalendarList({
     Key? key,
     required this.firstDate,
     required this.lastDate,
@@ -48,16 +40,15 @@ class CalendarList extends StatefulWidget {
     this.onSelectFinish,
     this.selectedStartDate,
     this.selectedEndDate,
-    this.showMode = CalendarListShowMode.dailog,
   })  : assert(!firstDate.isAfter(lastDate),
             'lastDate must be on or after firstDate'),
         super(key: key);
 
   @override
-  _CalendarListState createState() => _CalendarListState();
+  _TWCalendarListState createState() => _TWCalendarListState();
 }
 
-class _CalendarListState extends State<CalendarList> {
+class _TWCalendarListState extends State<TWCalendarList> {
   late DateTime? selectStartTime;
   late DateTime? selectEndTime;
 
@@ -80,41 +71,47 @@ class _CalendarListState extends State<CalendarList> {
 
   final double horizontalPadding = 8.w;
 
-  final double ensureViewHeight = 100.w;
+  final double ensureViewHeight = 67.w;
 
   @override
   void initState() {
     super.initState();
-    configure();
+    _configure();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-    );
+    return _buildBody();
   }
 
   /* UI Method */
-  SafeArea _buildBody() {
+  Widget _buildBody() {
     return SafeArea(
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: weekDayHeight,
-            child: _buildWeekdayView(),
+      child: Column(
+        children: [
+          if (widget.headerView != null) widget.headerView!,
+          Expanded(
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
+              children: <Widget>[
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: weekDayHeight,
+                  child: _buildWeekdayView(),
+                ),
+                _buildMonthView(),
+                Positioned(
+                  bottom: 0.0,
+                  left: 0.0,
+                  right: 0.0,
+                  height: ensureViewHeight,
+                  child: _buildEnsureView(),
+                )
+              ],
+            ),
           ),
-          _buildMonthView(),
-          Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            right: 0.0,
-            height: ensureViewHeight,
-            child: _buildEnsureView(),
-          )
         ],
       ),
     );
@@ -127,18 +124,16 @@ class _CalendarListState extends State<CalendarList> {
         right: horizontalPadding,
       ),
       decoration: const BoxDecoration(
-        // border: Border.all(width: 3, color: Color(0xffaaaaaa)),
-        // 实现阴影效果
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            offset: Offset(0, 2.0),
+            color: TWColors.twF5F5F5,
+            offset: Offset(0, 1.0),
             blurRadius: 1.0,
           )
         ],
       ),
-      child: const WeekdayRow(),
+      child: const TWWeekdayRow(),
     );
   }
 
@@ -147,18 +142,16 @@ class _CalendarListState extends State<CalendarList> {
       alignment: Alignment.center,
       padding: EdgeInsets.only(
         left: 15.w,
-        top: 15.w,
-        bottom: 32.w,
+        top: 12.w,
+        bottom: 12.w,
         right: 15.w,
       ),
       decoration: const BoxDecoration(
-        // border: Border.all(width: 3, color: Color(0xffaaaaaa)),
-        // 实现阴影效果
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
-            offset: Offset(0, -2.0),
+            color: TWColors.twF5F5F5,
+            offset: Offset(0, -1.0),
             blurRadius: 2.0,
           )
         ],
@@ -229,7 +222,7 @@ class _CalendarListState extends State<CalendarList> {
   Widget _getMonthView(DateTime dateTime) {
     int year = dateTime.year;
     int month = dateTime.month;
-    return MonthView(
+    return TWMonthView(
       context: context,
       year: year,
       month: month,
@@ -244,7 +237,7 @@ class _CalendarListState extends State<CalendarList> {
   }
 
   /* Private Method */
-  void configure() {
+  void _configure() {
     // 传入的选择开始日期
     selectStartTime = widget.selectedStartDate;
     // 传入的选择结束日期
@@ -267,7 +260,7 @@ class _CalendarListState extends State<CalendarList> {
         TWCalendarTool.getSelectedDaysTitle(selectStartTime, selectEndTime);
     final days = TWCalendarTool.getSelectedDays(selectStartTime, selectEndTime);
     if (days != 0) {
-      btnTitle = '確定($selectedDaysTitle 共$days天)';
+      btnTitle = '確定 ($selectedDaysTitle 共$days天)';
     }
     return btnTitle;
   }

@@ -1,17 +1,17 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 15:02:41
+ * @LastEditTime: 2022-07-21 16:16:24
  * @Description: 天数
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tw_chart_demo/calendar_demo/calendar/utils/tw_calendart_tool.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
-import 'calendar_notification.dart';
+import 'tw_calendar_notification.dart';
 
-class DayNumber extends StatefulWidget {
-  const DayNumber({
+class TWDayNumber extends StatefulWidget {
+  const TWDayNumber({
     Key? key,
     required this.size,
     required this.day,
@@ -28,10 +28,10 @@ class DayNumber extends StatefulWidget {
   final bool isDefaultSelected;
   final bool canSelected;
   @override
-  _DayNumberState createState() => _DayNumberState();
+  _TWDayNumberState createState() => _TWDayNumberState();
 }
 
-class _DayNumberState extends State<DayNumber> {
+class _TWDayNumberState extends State<TWDayNumber> {
   final double itemMargin = 5.0;
   bool isSelected = false;
 
@@ -100,7 +100,7 @@ class _DayNumberState extends State<DayNumber> {
         ? InkWell(
             onTap: () {
               if (widget.canSelected) {
-                CalendarNotification(widget.day).dispatch(context);
+                TWCalendarNotification(widget.day).dispatch(context);
               }
             },
             child: _dayItem())

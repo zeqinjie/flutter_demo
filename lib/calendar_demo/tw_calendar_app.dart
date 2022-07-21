@@ -1,12 +1,12 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:27:01
- * @LastEditTime: 2022-07-21 09:47:33
+ * @LastEditTime: 2022-07-21 16:08:41
  * @Description: 日历组件
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tw_chart_demo/calendar_demo/fullscreen_demo.dart';
+import 'package:tw_chart_demo/calendar_demo/tw_calendar_view.dart';
 
 class TWCalendarApp extends StatefulWidget {
   const TWCalendarApp({Key? key}) : super(key: key);
@@ -56,7 +56,14 @@ class _HomePageState extends State<_HomePage> {
   _showNavigateFullScreen(BuildContext context) async {
     selectResult1 = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const TWCalendarView()),
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(title: const Text('日历组件')),
+          body: const Material(
+            child: TWCalendarView(),
+          ),
+        ),
+      ),
     );
   }
 
