@@ -16,7 +16,7 @@
 走势图效果 fork 至 [传送门](https://github.com/good-good-study/flutter_chart) 感谢~
 - 适配了空安全
 - 补充了走势图点，控制隐藏 X,Y 坐标，及个别细节调整，以满足需求
-<img src="https://github.com/zeqinjie/flutter_demo/blob/main/pic/charts.png" width="443" height="897" align="middle"/>
+<img src="https://github.com/zeqinjie/flutter_demo/blob/main/pic/charts.png" width="291" height="633" align="middle"/>
 
 ##### 参考学习资料
 
@@ -31,9 +31,7 @@
 
 
 #### 日历组件
-走势图效果 fork 至 [传送门](https://github.com/heruijun/flutter_calendar_list) 感谢~
-- 适配了空安全
 - 补充非日期范围内可选
 - 适配大小
 - 其他根据需求优化代码
-<img src="https://github.com/zeqinjie/flutter_demo/blob/main/pic/calendar.png" width="461" height="896" align="middle"/>
+<img src="https://github.com/zeqinjie/flutter_demo/blob/main/pic/calendar.png" width="230" height="448" align="middle"/>
