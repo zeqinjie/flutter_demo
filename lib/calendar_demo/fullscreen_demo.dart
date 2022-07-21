@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 10:00:11
+ * @LastEditTime: 2022-07-21 13:43:02
  * @Description: your project
  */
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class _TWCalendarViewState extends State<TWCalendarView> {
   @override
   Widget build(BuildContext context) {
     return CalendarList(
-      firstDate: DateTime(2022, 7, 3),
+      firstDate: DateTime(2022, 7, 21),
       lastDate: DateTime(2022, 9, 21),
       // selectedStartDate: DateTime(2022, 8, 28),
       // selectedEndDate: DateTime(2022, 9, 2),

@@ -1,13 +1,14 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 22:10:08
- * @LastEditTime: 2022-07-21 10:22:16
+ * @LastEditTime: 2022-07-21 14:17:36
  * @Description: your project
  */
 library calendar_list;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tw_chart_demo/calendar_demo/calendar/utils/dates.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
 import 'month_view.dart';
 import 'weekday_row.dart';
@@ -72,13 +73,7 @@ class _CalendarListState extends State<CalendarList> {
   /// 结束月份
   late int monthEnd;
 
-  /// 开始日
-  late int dayStart;
-
-  /// 结束日
-  late int dayEnd;
-
-  /// 间隔多少天
+  /// 间隔多少月
   late int count;
 
   final double weekDayHeight = 48.w;
@@ -194,7 +189,7 @@ class _CalendarListState extends State<CalendarList> {
                         : TWColors.twB3B3B3),
               ),
               child: Text(
-                '確  定',
+                _getEnsureTitle(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.sp,
@@ -239,10 +234,12 @@ class _CalendarListState extends State<CalendarList> {
       year: year,
       month: month,
       padding: horizontalPadding,
-      dateTimeStart: selectStartTime,
-      dateTimeEnd: selectEndTime,
+      firstDate: widget.firstDate,
+      lastDate: widget.lastDate,
+      selectStartDateTime: selectStartTime,
+      selectEndDateTime: selectEndTime,
       todayColor: TWColors.twB3B3B3,
-      onSelectDayRang: (dateTime) => onSelectDayChanged(dateTime),
+      onSelectDayRang: (dateTime) => _onSelectDayChanged(dateTime),
     );
   }
 
@@ -260,16 +257,23 @@ class _CalendarListState extends State<CalendarList> {
     monthStart = widget.firstDate.month;
     // 结束月份
     monthEnd = widget.lastDate.month;
-    // 可以选择的开始日
-    dayStart = widget.firstDate.day;
-    // 可以选择的结束日
-    dayEnd = widget.lastDate.day;
-    // 总天数
+    // 总月数
     count = monthEnd - monthStart + (yearEnd - yearStart) * 12 + 1;
   }
 
+  String _getEnsureTitle() {
+    String btnTitle = '確   定';
+    final selectedDaysTitle =
+        TWDatesTool.getSelectedDaysTitle(selectStartTime, selectEndTime);
+    final days = TWDatesTool.getSelectedDays(selectStartTime, selectEndTime);
+    if (days != 0) {
+      btnTitle = '確定($selectedDaysTitle 共$days天)';
+    }
+    return btnTitle;
+  }
+
   // 选项处理回调
-  void onSelectDayChanged(DateTime dateTime) {
+  void _onSelectDayChanged(DateTime dateTime) {
     if (selectStartTime == null && selectEndTime == null) {
       selectStartTime = dateTime;
     } else if (selectStartTime != null && selectEndTime == null) {

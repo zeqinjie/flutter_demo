@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 10:16:24
+ * @LastEditTime: 2022-07-21 13:41:46
  * @Description: 天数
  */
 import 'package:flutter/material.dart';
@@ -62,13 +62,18 @@ class _DayNumberState extends State<DayNumber> {
   }
 
   Text _buildDay() {
+    Color color = TWColors.tw666666;
+    if (!widget.canSelected) {
+      color = TWColors.twCCCCCC;
+    }
+    if (widget.isToday || isSelected) {
+      color = TWColors.twFFFFFF;
+    }
     return Text(
       widget.day < 1 ? '' : widget.day.toString(),
       textAlign: TextAlign.center,
       style: TextStyle(
-        color: (widget.isToday || isSelected)
-            ? TWColors.twFFFFFF
-            : TWColors.tw666666,
+        color: color,
         fontSize: 15.sp,
         fontWeight: FontWeight.normal,
       ),
@@ -93,7 +98,9 @@ class _DayNumberState extends State<DayNumber> {
     return widget.day > 0
         ? InkWell(
             onTap: () {
-              CalendarNotification(widget.day).dispatch(context);
+              if (widget.canSelected) {
+                CalendarNotification(widget.day).dispatch(context);
+              }
             },
             child: _dayItem())
         : _dayItem();

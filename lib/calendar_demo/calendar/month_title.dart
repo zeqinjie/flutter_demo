@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 09:52:23
+ * @LastEditTime: 2022-07-21 12:01:12
  * @Description: your project
  */
 import 'package:flutter/material.dart';
@@ -23,8 +23,8 @@ class MonthTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final monthTitle = getMonthName(month, monthNames: monthNames);
-    final yearTitle = getYearName(year);
+    final monthTitle = TWDatesTool.getMonthName(month, monthNames: monthNames);
+    final yearTitle = TWDatesTool.getYearName(year);
     final title = yearTitle + monthTitle;
     return Text(
       title,

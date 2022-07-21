@@ -14,9 +14,11 @@ class MonthView extends StatefulWidget {
     required this.year,
     required this.month,
     required this.padding,
-    required this.dateTimeStart,
-    required this.dateTimeEnd,
+    required this.selectStartDateTime,
+    required this.selectEndDateTime,
     required this.onSelectDayRang,
+    required this.firstDate,
+    required this.lastDate,
     this.todayColor,
     this.monthNames,
   }) : super(key: key);
@@ -27,8 +29,15 @@ class MonthView extends StatefulWidget {
   final double padding;
   final Color? todayColor;
   final List<String>? monthNames;
-  final DateTime? dateTimeStart;
-  final DateTime? dateTimeEnd;
+  final DateTime? selectStartDateTime;
+  final DateTime? selectEndDateTime;
+
+  /// 开始的年月份
+  final DateTime firstDate;
+
+  /// 结束的年月份
+  final DateTime lastDate;
+
   final Function onSelectDayRang;
 
   double get itemWidth => getDayNumberSize(context, padding);
@@ -51,7 +60,7 @@ class _MonthViewState extends State<MonthView> {
     List<Row> dayRows = <Row>[];
     List<DayNumber> dayRowChildren = <DayNumber>[];
 
-    int daysInMonth = getDaysInMonth(
+    int daysInMonth = TWDatesTool.getDaysInMonth(
       widget.year,
       widget.month,
     );
@@ -61,30 +70,32 @@ class _MonthViewState extends State<MonthView> {
 
     for (int day = 2 - firstWeekdayOfMonth; day <= daysInMonth; day++) {
       DateTime moment = DateTime(widget.year, widget.month, day);
-      final bool isToday = dateIsToday(moment);
-
+      final bool isToday = TWDatesTool.dateIsToday(moment);
+      final _canSelected = canSelectedDate(date: moment, isToday: isToday);
       bool isDefaultSelected = false;
-      if (widget.dateTimeStart == null &&
-          widget.dateTimeEnd == null &&
+      if (widget.selectStartDateTime == null &&
+          widget.selectEndDateTime == null &&
           selectedDate == null) {
         isDefaultSelected = false;
       }
-      if (widget.dateTimeStart == selectedDate &&
-          widget.dateTimeEnd == null &&
+      if (widget.selectStartDateTime == selectedDate &&
+          widget.selectEndDateTime == null &&
           selectedDate?.day == day &&
           day > 0) {
         isDefaultSelected = true;
       }
-      if (widget.dateTimeStart != null && widget.dateTimeEnd != null) {
-        isDefaultSelected = (moment.isAtSameMomentAs(widget.dateTimeStart!) ||
-                    moment.isAtSameMomentAs(widget.dateTimeEnd!)) ||
-                moment.isAfter(widget.dateTimeStart!) &&
-                    moment.isBefore(widget.dateTimeEnd!) &&
-                    day > 0
-            ? true
-            : false;
+      if (widget.selectStartDateTime != null &&
+          widget.selectEndDateTime != null) {
+        isDefaultSelected =
+            (moment.isAtSameMomentAs(widget.selectStartDateTime!) ||
+                        moment.isAtSameMomentAs(widget.selectEndDateTime!)) ||
+                    moment.isAfter(widget.selectStartDateTime!) &&
+                        moment.isBefore(widget.selectEndDateTime!) &&
+                        day > 0
+                ? true
+                : false;
       }
-      // final _canSelected =
+
       dayRowChildren.add(
         DayNumber(
           size: widget.itemWidth,
@@ -92,7 +103,7 @@ class _MonthViewState extends State<MonthView> {
           isToday: isToday,
           isDefaultSelected: isDefaultSelected,
           todayColor: widget.todayColor,
-          canSelected: true,
+          canSelected: _canSelected,
         ),
       );
 
@@ -115,36 +126,48 @@ class _MonthViewState extends State<MonthView> {
 
   Widget buildMonthView(BuildContext context) {
     return NotificationListener<CalendarNotification>(
-        onNotification: (notification) {
-          selectedDate =
-              DateTime(widget.year, widget.month, notification.selectDay);
-          TWLog('CalendarNotification.... $selectedDate');
-          widget.onSelectDayRang(selectedDate);
-          return true;
-        },
-        child: Container(
-          width: 7 * getDayNumberSize(context, widget.padding),
-          margin: EdgeInsets.all(widget.padding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(
-                  top: 5.w,
-                ),
-                child: MonthTitle(
-                  year: widget.year,
-                  month: widget.month,
-                  monthNames: widget.monthNames,
-                ),
+      onNotification: (notification) {
+        selectedDate =
+            DateTime(widget.year, widget.month, notification.selectDay);
+        widget.onSelectDayRang(selectedDate);
+        return true;
+      },
+      child: Container(
+        width: 7 * getDayNumberSize(context, widget.padding),
+        margin: EdgeInsets.all(widget.padding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(
+                top: 5.w,
               ),
-              Container(
-                margin: EdgeInsets.only(top: 8.w),
-                child: buildMonthDays(context),
+              child: MonthTitle(
+                year: widget.year,
+                month: widget.month,
+                monthNames: widget.monthNames,
               ),
-            ],
-          ),
-        ));
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 8.w),
+              child: buildMonthDays(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /* Priavte Method */
+  bool canSelectedDate(
+      {required DateTime date,
+      required bool isToday,
+      bool canSeletedToday = false}) {
+    if (isToday & !canSeletedToday) {
+      // 当天不可以选择
+      return false;
+    }
+    return TWDatesTool.dateIsBetweenIn(date, widget.firstDate, widget.lastDate);
   }
 }
