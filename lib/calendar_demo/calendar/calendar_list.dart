@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 22:10:08
- * @LastEditTime: 2022-07-21 10:04:03
+ * @LastEditTime: 2022-07-21 10:22:16
  * @Description: your project
  */
 library calendar_list;
@@ -90,55 +90,7 @@ class _CalendarListState extends State<CalendarList> {
   @override
   void initState() {
     super.initState();
-    // 传入的选择开始日期
-    selectStartTime = widget.selectedStartDate;
-    // 传入的选择结束日期
-    selectEndTime = widget.selectedEndDate;
-    // 开始年份
-    yearStart = widget.firstDate.year;
-    // 结束年份
-    yearEnd = widget.lastDate.year;
-    // 开始月份
-    monthStart = widget.firstDate.month;
-    // 结束月份
-    monthEnd = widget.lastDate.month;
-    // 可以选择的开始日
-    dayStart = widget.firstDate.day;
-    // 可以选择的结束日
-    dayEnd = widget.lastDate.day;
-    // 总天数
-    count = monthEnd - monthStart + (yearEnd - yearStart) * 12 + 1;
-  }
-
-  // 选项处理回调
-  void onSelectDayChanged(DateTime dateTime) {
-    if (selectStartTime == null && selectEndTime == null) {
-      selectStartTime = dateTime;
-    } else if (selectStartTime != null && selectEndTime == null) {
-      selectEndTime = dateTime;
-      // 如果选择的开始日期和结束日期相等，则清除选项
-      if (selectStartTime == selectEndTime) {
-        setState(() {
-          selectStartTime = null;
-          selectEndTime = null;
-        });
-        return;
-      }
-      // 如果用户反选，则交换开始和结束日期
-      if (selectStartTime!.isAfter(selectEndTime!)) {
-        DateTime temp = selectStartTime!;
-        selectStartTime = selectEndTime;
-        selectEndTime = temp;
-      }
-    } else if (selectStartTime != null && selectEndTime != null) {
-      selectStartTime = null;
-      selectEndTime = null;
-      selectStartTime = dateTime;
-    }
-    setState(() {
-      selectStartTime;
-      selectEndTime;
-    });
+    configure();
   }
 
   @override
@@ -148,6 +100,7 @@ class _CalendarListState extends State<CalendarList> {
     );
   }
 
+  /* UI Method */
   SafeArea _buildBody() {
     return SafeArea(
       child: Stack(
@@ -278,12 +231,6 @@ class _CalendarListState extends State<CalendarList> {
     );
   }
 
-  void _finishSelect() {
-    if (selectStartTime != null) {
-      widget.onSelectFinish!(selectStartTime, selectEndTime);
-    }
-  }
-
   Widget _getMonthView(DateTime dateTime) {
     int year = dateTime.year;
     int month = dateTime.month;
@@ -297,5 +244,64 @@ class _CalendarListState extends State<CalendarList> {
       todayColor: TWColors.twB3B3B3,
       onSelectDayRang: (dateTime) => onSelectDayChanged(dateTime),
     );
+  }
+
+  /* Private Method */
+  void configure() {
+    // 传入的选择开始日期
+    selectStartTime = widget.selectedStartDate;
+    // 传入的选择结束日期
+    selectEndTime = widget.selectedEndDate;
+    // 开始年份
+    yearStart = widget.firstDate.year;
+    // 结束年份
+    yearEnd = widget.lastDate.year;
+    // 开始月份
+    monthStart = widget.firstDate.month;
+    // 结束月份
+    monthEnd = widget.lastDate.month;
+    // 可以选择的开始日
+    dayStart = widget.firstDate.day;
+    // 可以选择的结束日
+    dayEnd = widget.lastDate.day;
+    // 总天数
+    count = monthEnd - monthStart + (yearEnd - yearStart) * 12 + 1;
+  }
+
+  // 选项处理回调
+  void onSelectDayChanged(DateTime dateTime) {
+    if (selectStartTime == null && selectEndTime == null) {
+      selectStartTime = dateTime;
+    } else if (selectStartTime != null && selectEndTime == null) {
+      selectEndTime = dateTime;
+      // 如果选择的开始日期和结束日期相等，则清除选项
+      if (selectStartTime == selectEndTime) {
+        setState(() {
+          selectStartTime = null;
+          selectEndTime = null;
+        });
+        return;
+      }
+      // 如果用户反选，则交换开始和结束日期
+      if (selectStartTime!.isAfter(selectEndTime!)) {
+        DateTime temp = selectStartTime!;
+        selectStartTime = selectEndTime;
+        selectEndTime = temp;
+      }
+    } else if (selectStartTime != null && selectEndTime != null) {
+      selectStartTime = null;
+      selectEndTime = null;
+      selectStartTime = dateTime;
+    }
+    setState(() {
+      selectStartTime;
+      selectEndTime;
+    });
+  }
+
+  void _finishSelect() {
+    if (selectStartTime != null) {
+      widget.onSelectFinish!(selectStartTime, selectEndTime);
+    }
   }
 }

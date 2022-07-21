@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 10:02:50
+ * @LastEditTime: 2022-07-21 10:16:24
  * @Description: 天数
  */
 import 'package:flutter/material.dart';
@@ -16,6 +16,7 @@ class DayNumber extends StatefulWidget {
     required this.day,
     required this.isDefaultSelected,
     this.isToday = false,
+    this.canSelected = true,
     this.todayColor,
   }) : super(key: key);
 
@@ -24,7 +25,7 @@ class DayNumber extends StatefulWidget {
   final Color? todayColor;
   final double size;
   final bool isDefaultSelected;
-
+  final bool canSelected;
   @override
   _DayNumberState createState() => _DayNumberState();
 }
@@ -91,7 +92,9 @@ class _DayNumberState extends State<DayNumber> {
     isSelected = widget.isDefaultSelected;
     return widget.day > 0
         ? InkWell(
-            onTap: () => CalendarNotification(widget.day).dispatch(context),
+            onTap: () {
+              CalendarNotification(widget.day).dispatch(context);
+            },
             child: _dayItem())
         : _dayItem();
   }

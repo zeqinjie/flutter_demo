@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tw_chart_demo/common/tw_log.dart';
 import 'calendar_notification.dart';
 import 'day_number.dart';
 import 'month_title.dart';
@@ -39,6 +40,13 @@ class MonthView extends StatefulWidget {
 class _MonthViewState extends State<MonthView> {
   DateTime? selectedDate;
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: buildMonthView(context),
+    );
+  }
+
   Widget buildMonthDays(BuildContext context) {
     List<Row> dayRows = <Row>[];
     List<DayNumber> dayRowChildren = <DayNumber>[];
@@ -76,7 +84,7 @@ class _MonthViewState extends State<MonthView> {
             ? true
             : false;
       }
-
+      // final _canSelected =
       dayRowChildren.add(
         DayNumber(
           size: widget.itemWidth,
@@ -84,6 +92,7 @@ class _MonthViewState extends State<MonthView> {
           isToday: isToday,
           isDefaultSelected: isDefaultSelected,
           todayColor: widget.todayColor,
+          canSelected: true,
         ),
       );
 
@@ -109,6 +118,7 @@ class _MonthViewState extends State<MonthView> {
         onNotification: (notification) {
           selectedDate =
               DateTime(widget.year, widget.month, notification.selectDay);
+          TWLog('CalendarNotification.... $selectedDate');
           widget.onSelectDayRang(selectedDate);
           return true;
         },
@@ -136,12 +146,5 @@ class _MonthViewState extends State<MonthView> {
             ],
           ),
         ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: buildMonthView(context),
-    );
   }
 }
