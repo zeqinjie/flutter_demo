@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 16:39:15
+ * @LastEditTime: 2022-07-21 16:43:24
  * @Description: your project
  */
 import 'package:flutter/material.dart';
@@ -27,7 +27,15 @@ class _TWCalendarViewState extends State<TWCalendarView> {
       // selectedStartDate: DateTime(2022, 8, 28),
       // selectedEndDate: DateTime(2022, 9, 2),
       headerView: Container(
+        alignment: Alignment.center,
         height: 55.w,
+        child: Text(
+          '日历组件',
+          style: TextStyle(
+            color: TWColors.tw333333,
+            fontSize: 18.w,
+          ),
+        ),
       ),
       onSelectFinish: (selectStartTime, selectEndTime) {
         List<DateTime> result = <DateTime>[];
