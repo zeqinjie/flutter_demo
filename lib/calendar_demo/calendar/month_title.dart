@@ -7,7 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'utils/dates.dart';
+import 'utils/tw_calendart_tool.dart';
 
 class MonthTitle extends StatelessWidget {
   const MonthTitle({
@@ -23,8 +23,9 @@ class MonthTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final monthTitle = TWDatesTool.getMonthName(month, monthNames: monthNames);
-    final yearTitle = TWDatesTool.getYearName(year);
+    final monthTitle =
+        TWCalendarTool.getMonthName(month, monthNames: monthNames);
+    final yearTitle = TWCalendarTool.getYearName(year);
     final title = yearTitle + monthTitle;
     return Text(
       title,

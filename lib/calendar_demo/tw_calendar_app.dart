@@ -71,10 +71,7 @@ class _HomePageState extends State<_HomePage> {
       ),
       context: context,
       builder: (BuildContext context) {
-        return const SizedBox(
-          height: 600.0,
-          child: TWCalendarView(),
-        );
+        return const TWCalendarView();
       },
     ).then((result) {
       setState(() {

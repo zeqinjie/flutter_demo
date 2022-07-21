@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 16:40:19
+ * @LastEditTime: 2022-07-21 14:26:45
  * @Description: your project
  */
 import 'package:flutter/material.dart';
@@ -23,13 +23,4 @@ ScreenSizes screenSize(BuildContext context) {
   }
 }
 
-double getDayNumberSize(BuildContext context, double padding) {
-  return (MediaQuery.of(context).size.width - padding * 2) / 7;
-}
 
-double getMonthViewHeight(BuildContext context) {
-  const double padding = 8.0;
-  const double titleHeight = 21.0;
-
-  return (2 * padding) + titleHeight + 8.0 + (6 * getDayNumberSize(context, 0));
-}

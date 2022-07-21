@@ -1,11 +1,27 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 14:21:08
+ * @LastEditTime: 2022-07-21 14:26:50
  * @Description: your project
  */
 
-class TWDatesTool {
+import 'package:flutter/material.dart';
+
+class TWCalendarTool {
+  static double getMonthViewHeight(BuildContext context) {
+    const double padding = 8.0;
+    const double titleHeight = 21.0;
+
+    return (2 * padding) +
+        titleHeight +
+        8.0 +
+        (6 * TWCalendarTool.getDayNumberSize(context, 0));
+  }
+
+  static double getDayNumberSize(BuildContext context, double padding) {
+    return (MediaQuery.of(context).size.width - padding * 2) / 7;
+  }
+
   static bool dateIsToday(DateTime date) {
     final DateTime now = DateTime.now();
     return date.isAtSameMomentAs(DateTime(now.year, now.month, now.day));

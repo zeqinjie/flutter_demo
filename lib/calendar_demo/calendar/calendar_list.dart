@@ -8,7 +8,7 @@ library calendar_list;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tw_chart_demo/calendar_demo/calendar/utils/dates.dart';
+import 'package:tw_chart_demo/calendar_demo/calendar/utils/tw_calendart_tool.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
 import 'month_view.dart';
 import 'weekday_row.dart';
@@ -264,8 +264,8 @@ class _CalendarListState extends State<CalendarList> {
   String _getEnsureTitle() {
     String btnTitle = '確   定';
     final selectedDaysTitle =
-        TWDatesTool.getSelectedDaysTitle(selectStartTime, selectEndTime);
-    final days = TWDatesTool.getSelectedDays(selectStartTime, selectEndTime);
+        TWCalendarTool.getSelectedDaysTitle(selectStartTime, selectEndTime);
+    final days = TWCalendarTool.getSelectedDays(selectStartTime, selectEndTime);
     if (days != 0) {
       btnTitle = '確定($selectedDaysTitle 共$days天)';
     }
