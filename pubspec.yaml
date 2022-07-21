@@ -35,7 +35,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   # https://github.com/johnpryan/date_utils
   date_utils: ^0.2.0
-
+  # https://pub.flutter-io.cn/packages/flutter_screenutil/install
+  flutter_screenutil: ^5.5.3+2
+  
   rive: ^0.8.4
 
 dev_dependencies:

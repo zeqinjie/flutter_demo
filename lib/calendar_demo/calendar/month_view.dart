@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'calendar_notification.dart';
 import 'day_number.dart';
 import 'month_title.dart';
@@ -119,9 +120,8 @@ class _MonthViewState extends State<MonthView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: const EdgeInsets.only(
-                  top: 5,
-                  bottom: 5,
+                padding: EdgeInsets.only(
+                  top: 5.w,
                 ),
                 child: MonthTitle(
                   year: widget.year,
@@ -130,7 +130,7 @@ class _MonthViewState extends State<MonthView> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(top: 8.0),
+                margin: EdgeInsets.only(top: 8.w),
                 child: buildMonthDays(context),
               ),
             ],

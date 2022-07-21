@@ -1,10 +1,11 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-20 22:56:44
+ * @LastEditTime: 2022-07-21 09:52:23
  * @Description: your project
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'utils/dates.dart';
 
@@ -27,8 +28,8 @@ class MonthTitle extends StatelessWidget {
     final title = yearTitle + monthTitle;
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 16.0,
+      style: TextStyle(
+        fontSize: 16.sp,
         fontWeight: FontWeight.w600,
       ),
       maxLines: 1,

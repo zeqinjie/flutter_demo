@@ -1,10 +1,11 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:27:01
- * @LastEditTime: 2022-07-20 18:00:16
+ * @LastEditTime: 2022-07-21 09:47:33
  * @Description: 日历组件
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tw_chart_demo/calendar_demo/fullscreen_demo.dart';
 
 class TWCalendarApp extends StatefulWidget {
@@ -17,10 +18,20 @@ class TWCalendarApp extends StatefulWidget {
 class _TWCalendarAppAppState extends State<TWCalendarApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.blue),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return ScreenUtilInit(
+      designSize: const Size(375, 667),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (BuildContext context, Widget? child) {
+        return MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          debugShowCheckedModeBanner: false,
+          home: child,
+        );
+      },
+      child: Scaffold(
         appBar: AppBar(
           title: const Text('日历 demo'),
         ),

@@ -1,13 +1,14 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 22:10:08
- * @LastEditTime: 2022-07-20 23:03:45
+ * @LastEditTime: 2022-07-21 10:04:03
  * @Description: your project
  */
 library calendar_list;
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tw_chart_demo/common/colors/tw_colors.dart';
 import 'month_view.dart';
 import 'weekday_row.dart';
 
@@ -56,8 +57,6 @@ class CalendarList extends StatefulWidget {
 }
 
 class _CalendarListState extends State<CalendarList> {
-  // ignore: non_constant_identifier_names
-  final double HORIZONTAL_PADDING = 8.0;
   late DateTime? selectStartTime;
   late DateTime? selectEndTime;
 
@@ -82,9 +81,11 @@ class _CalendarListState extends State<CalendarList> {
   /// 间隔多少天
   late int count;
 
-  double weekDayHeight = 48;
+  final double weekDayHeight = 48.w;
 
-  double ensureViewHeight = 100;
+  final double horizontalPadding = 8.w;
+
+  final double ensureViewHeight = 100.w;
 
   @override
   void initState() {
@@ -174,8 +175,8 @@ class _CalendarListState extends State<CalendarList> {
   Widget _buildWeekdayView() {
     return Container(
       padding: EdgeInsets.only(
-        left: HORIZONTAL_PADDING,
-        right: HORIZONTAL_PADDING,
+        left: horizontalPadding,
+        right: horizontalPadding,
       ),
       decoration: const BoxDecoration(
         // border: Border.all(width: 3, color: Color(0xffaaaaaa)),
@@ -196,11 +197,11 @@ class _CalendarListState extends State<CalendarList> {
   Widget _buildEnsureView() {
     return Container(
       alignment: Alignment.center,
-      padding: const EdgeInsets.only(
-        left: 15.0,
-        top: 15.0,
-        bottom: 32.0,
-        right: 15.0,
+      padding: EdgeInsets.only(
+        left: 15.w,
+        top: 15.w,
+        bottom: 32.w,
+        right: 15.w,
       ),
       decoration: const BoxDecoration(
         // border: Border.all(width: 3, color: Color(0xffaaaaaa)),
@@ -208,7 +209,10 @@ class _CalendarListState extends State<CalendarList> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: Colors.black12, offset: Offset(0, -4.0), blurRadius: 4.0)
+            color: Colors.black12,
+            offset: Offset(0, -2.0),
+            blurRadius: 2.0,
+          )
         ],
       ),
       child: Flex(
@@ -225,25 +229,23 @@ class _CalendarListState extends State<CalendarList> {
                   ),
                 ),
                 padding: MaterialStateProperty.all(
-                  const EdgeInsets.only(
-                    top: 15.0,
-                    bottom: 15.0,
+                  EdgeInsets.only(
+                    top: 12.w,
+                    bottom: 12.w,
                   ),
                 ),
                 backgroundColor: MaterialStateProperty.all(
                     (selectStartTime != null ||
                             (selectStartTime != null && selectEndTime != null))
-                        ? Colors.deepOrange
-                        : Colors.grey),
+                        ? TWColors.twFF8000
+                        : TWColors.twB3B3B3),
               ),
-              child: const DefaultTextStyle(
+              child: Text(
+                '確  定',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                ),
-                child: Text(
-                  '确  定',
-                  textAlign: TextAlign.center,
+                  fontSize: 16.sp,
+                  color: TWColors.twFFFFFF,
                 ),
               ),
             ),
@@ -289,10 +291,10 @@ class _CalendarListState extends State<CalendarList> {
       context: context,
       year: year,
       month: month,
-      padding: HORIZONTAL_PADDING,
+      padding: horizontalPadding,
       dateTimeStart: selectStartTime,
       dateTimeEnd: selectEndTime,
-      todayColor: Colors.grey,
+      todayColor: TWColors.twB3B3B3,
       onSelectDayRang: (dateTime) => onSelectDayChanged(dateTime),
     );
   }
