@@ -1,14 +1,14 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 22:10:08
- * @LastEditTime: 2022-07-21 16:17:38
+ * @LastEditTime: 2022-07-21 16:37:07
  * @Description: your project
  */
 library calendar_list;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tw_chart_demo/calendar_demo/calendar/utils/tw_calendart_tool.dart';
+import 'package:tw_chart_demo/calendar_demo/tw_calendar/utils/tw_calendart_tool.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
 import 'tw_month_view.dart';
 import 'tw_weekday_row.dart';
@@ -124,7 +124,7 @@ class _TWCalendarListState extends State<TWCalendarList> {
         right: horizontalPadding,
       ),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: TWColors.twFFFFFF,
         boxShadow: [
           BoxShadow(
             color: TWColors.twF5F5F5,
@@ -147,7 +147,7 @@ class _TWCalendarListState extends State<TWCalendarList> {
         right: 15.w,
       ),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: TWColors.twFFFFFF,
         boxShadow: [
           BoxShadow(
             color: TWColors.twF5F5F5,
@@ -198,6 +198,7 @@ class _TWCalendarListState extends State<TWCalendarList> {
 
   Widget _buildMonthView() {
     return Container(
+      color: TWColors.twFFFFFF,
       margin: EdgeInsets.only(
         top: weekDayHeight,
         bottom: ensureViewHeight,

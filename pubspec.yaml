@@ -37,23 +37,50 @@ dependencies:
   date_utils: ^0.2.0
   # https://pub.flutter-io.cn/packages/flutter_screenutil/install
   flutter_screenutil: ^5.5.3+2
-  
+
   rive: ^0.8.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^1.0.4
+  # 生成 gen 静态资源
+  flutter_gen_runner:
+  build_runner:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
+flutter_gen:
+  output: lib/gen/ # Optional (default: lib/gen/)
+  line_length: 80   # Optional (default: 80)
+
+  integrations:
+    flutter_svg: true
+    flare_flutter: true
+    rive: true
+
+  assets:
+    enabled: true
+    package_parameter_enabled: true
+    # Assets.imagesChip
+    # style: camel-case
+
+    # Assets.images_chip
+    # style: snake-case
+
+    # Assets.images.chip (default style)
+    # style: dot-delimiter
+  fonts:
+    enabled: true
+    
 # The following section is specific to Flutter.
 flutter:
 
