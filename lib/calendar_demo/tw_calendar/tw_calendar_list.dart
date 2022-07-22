@@ -1,8 +1,8 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 22:10:08
- * @LastEditTime: 2022-07-21 16:37:07
- * @Description: your project
+ * @LastEditTime: 2022-07-22 14:20:53
+ * @Description: 日历组件
  */
 library calendar_list;
 
@@ -32,6 +32,9 @@ class TWCalendarList extends StatefulWidget {
   /// 头部组件
   final Widget? headerView;
 
+  /// 月视图高度
+  final double? monthBodyHeight;
+
   TWCalendarList({
     Key? key,
     required this.firstDate,
@@ -40,6 +43,7 @@ class TWCalendarList extends StatefulWidget {
     this.onSelectFinish,
     this.selectedStartDate,
     this.selectedEndDate,
+    this.monthBodyHeight = 300,
   })  : assert(!firstDate.isAfter(lastDate),
             'lastDate must be on or after firstDate'),
         super(key: key);
@@ -67,8 +71,10 @@ class _TWCalendarListState extends State<TWCalendarList> {
   /// 间隔多少月
   late int count;
 
+  /// 周视图高度
   final double weekDayHeight = 48.w;
 
+  /// 水平间隙
   final double horizontalPadding = 8.w;
 
   final double ensureViewHeight = 67.w;
@@ -88,29 +94,20 @@ class _TWCalendarListState extends State<TWCalendarList> {
   Widget _buildBody() {
     return SafeArea(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.headerView != null) widget.headerView!,
-          Expanded(
-            child: Stack(
-              clipBehavior: Clip.hardEdge,
-              children: <Widget>[
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: weekDayHeight,
-                  child: _buildWeekdayView(),
-                ),
-                _buildMonthView(),
-                Positioned(
-                  bottom: 0.0,
-                  left: 0.0,
-                  right: 0.0,
-                  height: ensureViewHeight,
-                  child: _buildEnsureView(),
-                )
-              ],
-            ),
+          SizedBox(
+            height: weekDayHeight,
+            child: _buildWeekdayView(),
+          ),
+          SizedBox(
+            height: widget.monthBodyHeight,
+            child: _buildMonthView(),
+          ),
+          SizedBox(
+            height: ensureViewHeight,
+            child: _buildEnsureView(),
           ),
         ],
       ),
@@ -199,10 +196,6 @@ class _TWCalendarListState extends State<TWCalendarList> {
   Widget _buildMonthView() {
     return Container(
       color: TWColors.twFFFFFF,
-      margin: EdgeInsets.only(
-        top: weekDayHeight,
-        bottom: ensureViewHeight,
-      ),
       child: CustomScrollView(
         slivers: <Widget>[
           SliverList(
