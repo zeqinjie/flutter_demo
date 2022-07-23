@@ -1,14 +1,14 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 16:32:39
+ * @LastEditTime: 2022-07-23 15:23:55
  * @Description: 天数
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tw_chart_demo/calendar_demo/tw_calendar/utils/tw_calendart_tool.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
 import 'tw_calendar_notification.dart';
+import 'utils/tw_calendart_tool.dart';
 
 class TWDayNumber extends StatefulWidget {
   const TWDayNumber({
@@ -32,7 +32,7 @@ class TWDayNumber extends StatefulWidget {
 }
 
 class _TWDayNumberState extends State<TWDayNumber> {
-  final double itemMargin = 5.0;
+  final double itemMargin = 5.w;
   bool isSelected = false;
 
   Widget _dayItem() {

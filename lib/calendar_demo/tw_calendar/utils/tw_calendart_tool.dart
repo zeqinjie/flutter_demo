@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-21 15:04:12
+ * @LastEditTime: 2022-07-23 15:20:32
  * @Description: 日历辅助工具类
  */
 
@@ -24,7 +24,7 @@ class TWCalendarTool {
 
   static bool dateIsToday(DateTime date) {
     final DateTime now = DateTime.now();
-    return date.isAtSameMomentAs(DateTime(now.year, now.month, now.day));
+    return isSameDate(date, now);
   }
 
   /// 在过去和未来直接
@@ -36,6 +36,12 @@ class TWCalendarTool {
       return true;
     }
     return false;
+  }
+
+  static bool isSameDate(DateTime firstDate, DateTime secondDate) {
+    return firstDate.year == secondDate.year &&
+        firstDate.month == secondDate.month &&
+        firstDate.day == secondDate.day;
   }
 
   static int getDaysInMonth(int year, int month) {

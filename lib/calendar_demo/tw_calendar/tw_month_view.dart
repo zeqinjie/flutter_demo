@@ -1,3 +1,10 @@
+/*
+ * @Author: zhengzeqin
+ * @Date: 2022-07-21 17:26:09
+ * @LastEditTime: 2022-07-23 15:21:04
+ * @Description: 月视图
+ */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'tw_calendar_notification.dart';
@@ -85,8 +92,9 @@ class _TWMonthViewState extends State<TWMonthView> {
       if (widget.selectStartDateTime != null &&
           widget.selectEndDateTime != null) {
         isDefaultSelected =
-            (moment.isAtSameMomentAs(widget.selectStartDateTime!) ||
-                        moment.isAtSameMomentAs(widget.selectEndDateTime!)) ||
+            (TWCalendarTool.isSameDate(moment, widget.selectStartDateTime!) ||
+                        TWCalendarTool.isSameDate(
+                            moment, widget.selectEndDateTime!)) ||
                     moment.isAfter(widget.selectStartDateTime!) &&
                         moment.isBefore(widget.selectEndDateTime!) &&
                         day > 0
@@ -167,6 +175,9 @@ class _TWMonthViewState extends State<TWMonthView> {
       return false;
     }
     return TWCalendarTool.dateIsBetweenIn(
-        date, widget.firstDate, widget.lastDate);
+      date,
+      widget.firstDate,
+      widget.lastDate,
+    );
   }
 }
