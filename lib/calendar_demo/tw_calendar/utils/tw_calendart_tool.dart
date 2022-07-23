@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:41:08
- * @LastEditTime: 2022-07-23 15:20:32
+ * @LastEditTime: 2022-07-23 16:26:51
  * @Description: 日历辅助工具类
  */
 
@@ -102,7 +102,11 @@ class TWCalendarTool {
     DateTime? selectEndTime,
   ) {
     if (selectStartTime != null && selectEndTime != null) {
-      final d = selectEndTime.difference(selectStartTime);
+      final start = DateTime(
+          selectStartTime.year, selectStartTime.month, selectStartTime.day);
+      final end = DateTime(
+          selectEndTime.year, selectEndTime.month, selectEndTime.day);
+      final d = end.difference(start);
       return d.inDays + 1;
     }
     if (selectStartTime != null) {

@@ -1,17 +1,25 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 22:10:08
- * @LastEditTime: 2022-07-23 15:24:18
+ * @LastEditTime: 2022-07-23 16:56:07
  * @Description: 日历组件
  */
 library calendar_list;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tw_chart_demo/calendar_demo/tw_calendar/utils/tw_calendart_tool.dart';
 import 'package:tw_chart_demo/common/colors/tw_colors.dart';
 import 'tw_month_view.dart';
 import 'tw_weekday_row.dart';
+import 'utils/tw_calendart_tool.dart';
+
+enum TWCalendarListSeletedMode {
+  /// 默认选择是连续多选
+  defaltSerial,
+
+  /// 单选连续,从可选日开始
+  singleSerial,
+}
 
 class TWCalendarList extends StatefulWidget {
   /// 开始的年月份
@@ -35,6 +43,12 @@ class TWCalendarList extends StatefulWidget {
   /// 月视图高度
   final double? monthBodyHeight;
 
+  /// 选择模式
+  final TWCalendarListSeletedMode? seletedMode;
+
+  /// 点击回调
+  final void Function(DateTime seletedDate, int seletedDays)? onSelectDayRang;
+
   TWCalendarList({
     Key? key,
     required this.firstDate,
@@ -44,6 +58,8 @@ class TWCalendarList extends StatefulWidget {
     this.selectedStartDate,
     this.selectedEndDate,
     this.monthBodyHeight = 300,
+    this.onSelectDayRang,
+    this.seletedMode = TWCalendarListSeletedMode.defaltSerial,
   })  : assert(!firstDate.isAfter(lastDate),
             'lastDate must be on or after firstDate'),
         super(key: key);
@@ -78,6 +94,9 @@ class _TWCalendarListState extends State<TWCalendarList> {
   final double horizontalPadding = 8.w;
 
   final double ensureViewHeight = 67.w;
+
+  /// 选中了多少天
+  int seletedDays = 0;
 
   @override
   void initState() {
@@ -246,48 +265,68 @@ class _TWCalendarListState extends State<TWCalendarList> {
     monthEnd = widget.lastDate.month;
     // 总月数
     count = monthEnd - monthStart + (yearEnd - yearStart) * 12 + 1;
+
+    seletedDays =
+        TWCalendarTool.getSelectedDays(selectStartTime, selectEndTime);
   }
 
   String _getEnsureTitle() {
     String btnTitle = '確   定';
     final selectedDaysTitle =
         TWCalendarTool.getSelectedDaysTitle(selectStartTime, selectEndTime);
-    final days = TWCalendarTool.getSelectedDays(selectStartTime, selectEndTime);
-    if (days != 0) {
-      btnTitle = '確定 ($selectedDaysTitle 共$days天)';
+    if (seletedDays != 0) {
+      btnTitle = '確定 ($selectedDaysTitle 共$seletedDays)';
     }
     return btnTitle;
   }
 
   // 选项处理回调
   void _onSelectDayChanged(DateTime dateTime) {
-    if (selectStartTime == null && selectEndTime == null) {
-      selectStartTime = dateTime;
-    } else if (selectStartTime != null && selectEndTime == null) {
-      selectEndTime = dateTime;
-      // 如果选择的开始日期和结束日期相等，则清除选项
-      if (selectStartTime == selectEndTime) {
-        setState(() {
+    switch (widget.seletedMode) {
+      case TWCalendarListSeletedMode.singleSerial:
+        selectStartTime = widget.firstDate.add(const Duration(days: 1));
+        selectEndTime = dateTime;
+        break;
+      default:
+        if (selectStartTime == null && selectEndTime == null) {
+          selectStartTime = dateTime;
+        } else if (selectStartTime != null && selectEndTime == null) {
+          selectEndTime = dateTime;
+          // 如果选择的开始日期和结束日期相等，则清除选项
+          if (selectStartTime == selectEndTime) {
+            setState(() {
+              selectStartTime = null;
+              selectEndTime = null;
+            });
+            seletedDays = 0;
+            _handerSelectDayRang(dateTime);
+            return;
+          }
+          // 如果用户反选，则交换开始和结束日期
+          if (selectStartTime!.isAfter(selectEndTime!)) {
+            DateTime temp = selectStartTime!;
+            selectStartTime = selectEndTime;
+            selectEndTime = temp;
+          }
+        } else if (selectStartTime != null && selectEndTime != null) {
           selectStartTime = null;
           selectEndTime = null;
-        });
-        return;
-      }
-      // 如果用户反选，则交换开始和结束日期
-      if (selectStartTime!.isAfter(selectEndTime!)) {
-        DateTime temp = selectStartTime!;
-        selectStartTime = selectEndTime;
-        selectEndTime = temp;
-      }
-    } else if (selectStartTime != null && selectEndTime != null) {
-      selectStartTime = null;
-      selectEndTime = null;
-      selectStartTime = dateTime;
+          selectStartTime = dateTime;
+        }
     }
+    seletedDays =
+        TWCalendarTool.getSelectedDays(selectStartTime, selectEndTime);
+    _handerSelectDayRang(dateTime);
     setState(() {
       selectStartTime;
       selectEndTime;
     });
+  }
+
+  void _handerSelectDayRang(DateTime dateTime) {
+    if (widget.onSelectDayRang != null) {
+      widget.onSelectDayRang!(dateTime, seletedDays);
+    }
   }
 
   void _finishSelect() {

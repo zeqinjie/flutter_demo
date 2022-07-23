@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-21 17:26:09
- * @LastEditTime: 2022-07-23 15:21:04
+ * @LastEditTime: 2022-07-23 16:19:12
  * @Description: 月视图
  */
 
@@ -43,7 +43,7 @@ class TWMonthView extends StatefulWidget {
   /// 结束的年月份
   final DateTime lastDate;
 
-  final Function onSelectDayRang;
+  final void Function(DateTime seletedDate) onSelectDayRang;
 
   double get itemWidth => TWCalendarTool.getDayNumberSize(context, padding);
 
@@ -133,9 +133,15 @@ class _TWMonthViewState extends State<TWMonthView> {
   Widget buildMonthView(BuildContext context) {
     return NotificationListener<TWCalendarNotification>(
       onNotification: (notification) {
-        selectedDate =
-            DateTime(widget.year, widget.month, notification.selectDay);
-        widget.onSelectDayRang(selectedDate);
+        selectedDate = DateTime(
+          widget.year,
+          widget.month,
+          notification.selectDay,
+        );
+        if (selectedDate != null) {
+          widget.onSelectDayRang(selectedDate!);
+        }
+
         return true;
       },
       child: Container(
