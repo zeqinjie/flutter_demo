@@ -185,12 +185,6 @@ class _TWCalendarListState extends State<TWCalendarList> {
                     color: Colors.white,
                   ),
                 ),
-                padding: MaterialStateProperty.all(
-                  EdgeInsets.only(
-                    top: 12.w,
-                    bottom: 12.w,
-                  ),
-                ),
                 backgroundColor: MaterialStateProperty.all(
                     (selectStartTime != null ||
                             (selectStartTime != null && selectEndTime != null))
