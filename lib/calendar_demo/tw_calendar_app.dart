@@ -1,7 +1,7 @@
 /*
  * @Author: zhengzeqin
  * @Date: 2022-07-20 14:27:01
- * @LastEditTime: 2022-07-24 20:59:46
+ * @LastEditTime: 2022-07-24 21:01:05
  * @Description: 日历组件
  */
 import 'package:flutter/material.dart';
@@ -81,7 +81,7 @@ class _HomePageState extends State<_HomePage> {
       builder: (BuildContext context) {
         return const TWCalendarView();
       },
-    )
+    );
   }
 
   @override
